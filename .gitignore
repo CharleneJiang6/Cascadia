@@ -30,3 +30,16 @@
 *.exe
 *.out
 *.app
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.vsix
+*.vsidx
+
+# Build folders
+bin/
+obj/
+Debug/
+Release/
