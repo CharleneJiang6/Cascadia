@@ -43,3 +43,10 @@ public:
 class JetonFaune {
 	Faune type;
 };
+
+class CarteMarquage {
+	Faune faune;
+
+public :
+	
+};
