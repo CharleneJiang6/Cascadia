@@ -39,3 +39,7 @@ public:
 	bool donneJetonNature() const { return nbFaunes == 0; }
 
 };
+
+class JetonFaune {
+	Faune type;
+};
