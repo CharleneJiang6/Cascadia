@@ -1,8 +1,12 @@
 #pragma once
 #include <iostream>
+#include <vector>
+#include <stack>
+#include <array>
+
 using namespace std;
 
-enum class Habitat { marais, fleuve, montagne, prairie, forêt };
+enum class Habitat { marais, fleuve, montagne, prairie, foret };
 enum class Faune { saumon, ours, buse, renard, wapiti };
 
 class Position {
@@ -27,26 +31,56 @@ public:
 ostream& operator<<(ostream& flux, const Position& p); //afficher une Position
 
 class Tuile {
-	Habitat paysages[2]; //faut-il un indice pour surveiller le nb réel de Habitat?
-	Faune faunes[3];
-	size_t nbPaysages;
-	size_t nbFaunes;
+	array<Habitat, 2> paysages;
+	array<Faune,3> faunes;
 	bool jetonPlace;
 
 public:
 	//definir getter, setter, constructeur, methodes
 
-	bool donneJetonNature() const { return nbFaunes == 0; }
+	bool donneJetonNature() const { return faunes.size() == 1; }
 
 };
 
 class JetonFaune {
 	Faune type;
+public:
+	//getters + constructeur
 };
 
 class CarteMarquage {
 	Faune faune;
 
 public :
-	
+	//getters + constructeur
+};
+
+class Pioche {
+	//todo
+};
+
+class EnvJoueur {
+	string pseudo;
+	//unordered_map<Position, Tuile, PositionHash> ?
+	size_t nbJetonNature;
+	size_t scoreFinal;
+
+public:
+	//getters
+	//setters
+	//methods
+};
+
+class Partie {
+	size_t nbJoeurs;
+	size_t compteurTours;
+	stack<Tuile> tuilesRestantes;
+	stack<JetonFaune> jetonsRestants;
+	EnvJoueur* currentJoeur;
+
+
+public:
+	//getters
+	//setters
+	//methods
 };
