@@ -4,7 +4,7 @@ using namespace std;
 
 int main() {
 	cout << "hello world" << endl;
-
+	// nicolas qui fait un test hello world
 	//test Position
 	Position p(1, 0, -1);
 	cout << p;
