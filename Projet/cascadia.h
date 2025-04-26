@@ -24,24 +24,13 @@ public:
 	int getR() const { return r; }
 	int getS() const { return s; }
 
-	vector<Position> getPositionsAdjacentes() const {
-		return {
-			Position(q + 1, r, s - 1),    // Nord-Est, côté 0
-			Position(q + 1, r - 1, s),    // Est, côté 1
-			Position(q, r - 1, s + 1),    // Sud-Est, côté 2
-			Position(q - 1, r, s + 1),    // Sud-Ouest, côté 3
-			Position(q - 1, r + 1, s),    // Ouest, côté 4
-			Position(q, r + 1, s - 1),    // Nord-Ouest, côté 5 			
-		};
-	}
+	vector<Position> getPositionsAdjacentes() const;
 
-	bool estAdjacente(const Position& position) const {
-		const int dq = abs(q - position.q);
-		const int dr = abs(r - position.r);
-		const int ds = abs(s - position.s);
-		return (dq + dr + ds) == 2;
-	}
-	
+	bool estAdjacente(const Position& position) const;
+
+	bool operator==(const Position& position) const; 
+
+	bool operator!=(const Position& position) const; 
 };
 
 ostream& operator<<(ostream& flux, const Position& p); //afficher une Position
