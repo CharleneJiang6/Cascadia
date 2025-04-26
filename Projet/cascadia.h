@@ -13,11 +13,6 @@ class Position {
 	int q, r, s;
 
 public:
-	//definir setter??
-
-	int getQ() const { return q; }
-	int getR() const { return r; }
-	int getS() const { return s; }
 
 	Position(int x1 = 0, int x2 = 0, int x3 = 0) : q(x1), r(x2), s(x3) {
 		if (q + r + s != 0) {
@@ -25,7 +20,28 @@ public:
 		}
 	}
 
-	//definir mehtodes
+	int getQ() const { return q; }
+	int getR() const { return r; }
+	int getS() const { return s; }
+
+	vector<Position> getPositionsAdjacentes() const {
+		return {
+			Position(q + 1, r, s - 1),    // Nord-Est, côté 0
+			Position(q + 1, r - 1, s),    // Est, côté 1
+			Position(q, r - 1, s + 1),    // Sud-Est, côté 2
+			Position(q - 1, r, s + 1),    // Sud-Ouest, côté 3
+			Position(q - 1, r + 1, s),    // Ouest, côté 4
+			Position(q, r + 1, s - 1),    // Nord-Ouest, côté 5 			
+		};
+	}
+
+	bool estAdjacente(const Position& position) const {
+		const int dq = abs(q - position.q);
+		const int dr = abs(r - position.r);
+		const int ds = abs(s - position.s);
+		return (dq + dr + ds) == 2;
+	}
+	
 };
 
 ostream& operator<<(ostream& flux, const Position& p); //afficher une Position
