@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <stack>
+#include <array>
 
 using namespace std;
 
@@ -29,16 +31,14 @@ public:
 ostream& operator<<(ostream& flux, const Position& p); //afficher une Position
 
 class Tuile {
-	Habitat paysages[2]; //faut-il un indice pour surveiller le nb réel de Habitat?
-	Faune faunes[3];
-	size_t nbPaysages;
-	size_t nbFaunes;
+	array<Habitat, 2> paysages;
+	array<Faune,3> faunes;
 	bool jetonPlace;
 
 public:
 	//definir getter, setter, constructeur, methodes
 
-	bool donneJetonNature() const { return nbFaunes == 0; }
+	bool donneJetonNature() const { return faunes.size() == 1; }
 
 };
 
@@ -74,8 +74,8 @@ public:
 class Partie {
 	size_t nbJoeurs;
 	size_t compteurTours;
-	vector<Tuile> tuilesRestantes;
-	vector<JetonFaune> jetonsRestants;
+	stack<Tuile> tuilesRestantes;
+	stack<JetonFaune> jetonsRestants;
 	EnvJoueur* currentJoeur;
 
 
