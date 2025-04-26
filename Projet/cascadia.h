@@ -50,3 +50,7 @@ class CarteMarquage {
 public :
 	
 };
+
+class Pioche {
+
+};
