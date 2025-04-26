@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-enum class Habitat { marais, fleuve, montagne, prairie, forêt };
+enum class Habitat { marais, fleuve, montagne, prairie, foret };
 enum class Faune { saumon, ours, buse, renard, wapiti };
 
 class Position {
