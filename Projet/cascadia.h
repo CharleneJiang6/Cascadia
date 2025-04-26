@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <vector>
+
 using namespace std;
 
 enum class Habitat { marais, fleuve, montagne, prairie, foret };
@@ -42,15 +44,43 @@ public:
 
 class JetonFaune {
 	Faune type;
+public:
+	//getters + constructeur
 };
 
 class CarteMarquage {
 	Faune faune;
 
 public :
-	
+	//getters + constructeur
 };
 
 class Pioche {
+	//todo
+};
 
+class EnvJoueur {
+	string pseudo;
+	//unordered_map<Position, Tuile, PositionHash> ?
+	size_t nbJetonNature;
+	size_t scoreFinal;
+
+public:
+	//getters
+	//setters
+	//methods
+};
+
+class Partie {
+	size_t nbJoeurs;
+	size_t compteurTours;
+	vector<Tuile> tuilesRestantes;
+	vector<JetonFaune> jetonsRestants;
+	EnvJoueur* currentJoeur;
+
+
+public:
+	//getters
+	//setters
+	//methods
 };
