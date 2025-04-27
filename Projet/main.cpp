@@ -12,10 +12,12 @@ int main() {
 	Position q(0, 0, 0);
 	cout << q << endl;
 
-	cout << p.estAdjacente(q) << endl;
+	//cout << p.estAdjacente(q) << endl;
 
-	cout << (p == q) << endl;
-	cout << (p != q) << endl;
-	
-	cout << p.getPositionsAdjacentes().at(0);
+	//cout << (p == q) << endl;
+	//cout << (p != q) << endl;
+	//
+	//cout << p.getPositionsAdjacentes().at(0);
+
+	cout << (p + q);
 }

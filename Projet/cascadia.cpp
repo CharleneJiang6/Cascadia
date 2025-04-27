@@ -34,3 +34,11 @@ bool Position::operator==(const Position& position) const {
 bool Position::operator!=(const Position& position) const {
 	return !(*this == position);
 }
+
+const Position& Position::operator+(const Position& position) const { 
+	return Position(q + position.getQ(), r + position.getR(), s + position.getS());
+}
+
+const Position& Position::operator-(const Position& position) const {
+	return Position(q - position.getQ(), r - position.getR(), s - position.getS());
+}

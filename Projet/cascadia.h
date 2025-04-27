@@ -31,6 +31,11 @@ public:
 	bool operator==(const Position& position) const; 
 
 	bool operator!=(const Position& position) const; 
+
+	const Position& operator+(const Position& position) const;
+
+	const Position& operator-(const Position& position) const;
+
 };
 
 ostream& operator<<(ostream& flux, const Position& p); //afficher une Position
