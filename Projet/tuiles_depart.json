@@ -1,0 +1,54 @@
+{
+    "tuiles_depart": [
+      {
+        "id": 13,
+        "paires": [
+          {
+            "tuile": {
+              "id": 13,
+              "habitats": [
+                "montagne",
+                "montagne",
+                "montagne",
+                "montagne",
+                "montagne",
+                "montagne"
+              ],
+              "faunes": ["ours"],
+              "donneJetonNature": true
+            }
+          },
+          {
+            "tuile": {
+              "id": 17,
+              "habitats": [
+                "montagne",
+                "forêt",
+                "montagne",
+                "montagne",
+                "montagne",
+                "montagne"
+              ],
+              "faunes": ["aigle", "ours"],
+              "donneJetonNature": false
+            }
+          },
+          {
+            "tuile": {
+              "id": 18,
+              "habitats": [
+                "plaine",
+                "plaine",
+                "océan",
+                "océan",
+                "désert",
+                "plaine"
+              ],
+              "faunes": ["lapin", "wapiti"],
+              "donneJetonNature": true
+            }
+          }
+        ]
+      }
+    ]
+  }
