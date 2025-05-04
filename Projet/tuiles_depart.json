@@ -2,7 +2,7 @@
     "tuiles_depart": [
         {
             "id": 1,
-            "paires": [
+            "triplet": [
                 {
                     "tuile": {
                         "id": 13,
@@ -61,7 +61,7 @@
         },
         {
             "id": 2,
-            "paires": [
+            "triplet": [
                 {
                     "tuile": {
                         "id": 33,
@@ -120,7 +120,7 @@
         },
         {
             "id": 3,
-            "paires": [
+            "triplet": [
                 {
                     "tuile": {
                         "id": 53,
@@ -179,7 +179,7 @@
         },
         {
             "id": 4,
-            "paires": [
+            "triplet": [
                 {
                     "tuile": {
                         "id": 73,
@@ -238,7 +238,7 @@
         },
         {
             "id": 5,
-            "paires": [
+            "triplet": [
                 {
                     "tuile": {
                         "id": 93,
