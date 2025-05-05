@@ -4,6 +4,8 @@
 #include <stack>
 #include <array>
 #include <optional>
+#include <utility>
+#include <unordered_map>
 
 using namespace std;
 
@@ -66,7 +68,9 @@ class Tuile {
 
 public:
 	//definir getter, setter, constructeur, methodes
-
+	
+	// constructeur a modifier
+	Tuile() : jetonPlace(false) {}
 	bool donneJetonNature() const { return faunes.size() == 1; }
 
 };
@@ -75,6 +79,12 @@ class JetonFaune {
 	Faune type;
 public:
 	//getters + constructeur
+
+	// constructeur
+	JetonFaune(Faune type) : type(type) {}
+
+	// getter pour type
+	Faune getType() const { return type; }
 };
 
 class CarteMarquage {
@@ -85,7 +95,46 @@ public :
 };
 
 class Pioche {
-	//todo
+private:
+	array<pair<Tuile, JetonFaune>, 4> pioche;
+	// Privation du constructeur
+	Pioche() = default;
+public:
+	// Suppression du constructeur par copie et par affectation 
+	Pioche(const Pioche&) = delete;
+	Pioche& operator=(const Pioche&) = delete;
+
+	// Singleton
+	inline static Pioche& getInstance() {
+		static Pioche instance; // Guaranteed to be destroyed and instantiated on first use
+		return instance;
+	}
+
+	// setterPair à indice specifique
+	inline void setPair(size_t index, const Tuile& tuile, const JetonFaune& jeton){
+		if (index < pioche.size()) {
+			pioche[index] = make_pair(tuile, jeton);
+		}
+		throw out_of_range("Indice hors intervalle de la taille de la pioche");
+	}
+
+	// getterPair à indice specifique
+	inline pair<Tuile, JetonFaune> getPair(size_t index) const {
+		if (index < pioche.size()) {
+			return pioche[index];
+		}
+		throw out_of_range("Indice hors intervalle de la taille de la pioche");
+	}
+
+	// verification si pioche contient au moins un type de JetonFaune de cardinalité == count fois
+	// fauneCount les faunes indice dans l'ordre de Enum Class
+	bool hasIdenticalJetonFaune(int count) const;
+
+	int getCorrespondingIndexFaune(Faune type) const;
+
+	bool hasThreeIdentical() const;
+
+	bool hasFourIdentical() const;
 };
 
 class EnvJoueur {

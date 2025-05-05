@@ -1,6 +1,6 @@
 #include <iostream>
 #include "cascadia.h"
-using namespace std;
+
 
 ostream& operator<<(ostream& flux, const Position& p)
 {
@@ -92,3 +92,40 @@ const std::vector<Position> direction_vecteur = {
 	Position(-1, 0, 1), //Ouest,4
 	Position(0, -1, 1)  //NordOuest,5
 };
+
+// les methodes de la classe Pioche
+// verification si pioche contient au moins un type de JetonFaune de cardinalité == count fois
+	// fauneCount les faunes indice dans l'ordre de Enum Class
+bool Pioche::hasIdenticalJetonFaune(int count) const {
+	array<int, 5> fauneCount;
+	// compter respectivement le nb de chaque faune presente
+	for (const auto& pair : pioche) {
+		fauneCount[getCorrespondingIndexFaune(pair.second.getType())]++;
+	}
+	// verification du nombre
+	for (const auto& value : fauneCount) {
+		if (value == count) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int Pioche::getCorrespondingIndexFaune(Faune type) const {
+	switch (type) {
+	case Faune::saumon: return 0;
+	case Faune::ours:   return 1;
+	case Faune::buse:   return 2;
+	case Faune::renard: return 3;
+	case Faune::wapiti: return 4;
+	default: throw std::invalid_argument("Unknown Faune type");
+	}
+}
+
+bool Pioche::hasThreeIdentical() const {
+	return hasIdenticalJetonFaune(3);
+}
+
+bool Pioche::hasFourIdentical() const {
+	return hasIdenticalJetonFaune(4);
+}
