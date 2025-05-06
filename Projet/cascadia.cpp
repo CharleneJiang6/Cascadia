@@ -96,36 +96,51 @@ const std::vector<Position> direction_vecteur = {
 // les methodes de la classe Pioche
 // verification si pioche contient au moins un type de JetonFaune de cardinalité == count fois
 	// fauneCount les faunes indice dans l'ordre de Enum Class
-bool Pioche::hasIdenticalJetonFaune(int count) const {
+bool Pioche::aIdentiqueJeton(int nombre) const {
 	array<int, 5> fauneCount;
 	// compter respectivement le nb de chaque faune presente
 	for (const auto& pair : pioche) {
-		fauneCount[getCorrespondingIndexFaune(pair.second.getType())]++;
+		fauneCount[retourneIndiceFaune(pair.second.getType())]++;
 	}
 	// verification du nombre
 	for (const auto& value : fauneCount) {
-		if (value == count) {
+		if (value == nombre) {
 			return true;
 		}
 	}
 	return false;
 }
 
-int Pioche::getCorrespondingIndexFaune(Faune type) const {
+int Pioche::retourneIndiceFaune(Faune type) const {
 	switch (type) {
 	case Faune::saumon: return 0;
 	case Faune::ours:   return 1;
 	case Faune::buse:   return 2;
 	case Faune::renard: return 3;
 	case Faune::wapiti: return 4;
-	default: throw std::invalid_argument("Unknown Faune type");
+	default: throw std::invalid_argument("Type de Faune Inconnu");
 	}
 }
 
-bool Pioche::hasThreeIdentical() const {
-	return hasIdenticalJetonFaune(3);
+bool Pioche::estTroisIdentique() const {
+	return aIdentiqueJeton(3);
 }
 
-bool Pioche::hasFourIdentical() const {
-	return hasIdenticalJetonFaune(4);
+bool Pioche::estQuatreIdentique() const {
+	return aIdentiqueJeton(4);
+}
+
+void Pioche::retirerPaire(size_t indice) {
+	if (indice < 4) {
+		pioche[indice] = make_pair(nouvelleTuile(),nouveauJetonFaune());
+	}
+	throw out_of_range("Indice hors intervalle de la taille de la pioche");
+}
+
+void Pioche::resetJetonFaune(){
+	for (int i = 0; i < 4; i++) {
+		pair<Tuile, JetonFaune>& pair = getPair(i);
+		pair = make_pair(pair.first, nouveauJetonFaune());
+		// sans faire faune type --
+	}
 }
