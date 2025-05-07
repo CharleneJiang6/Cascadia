@@ -20,18 +20,18 @@ string directionToString(Direction dir) {
 	}
 }
 
-ostream& operator<<(ostream& flux, const Direction& d)
+ostream& operator<<(ostream& flux, Direction d)
 {
 	flux << directionToString(d);
 	return flux;
 }
 
-const Direction getDirectionOpposee(Direction dir) {
+Direction getDirectionOpposee(Direction dir) {
 	return static_cast<Direction>((static_cast<int>(dir) + 3) % 6);
 }
 
 //par exemple, sur le coté NordOuest de a se trouve b, alors la fonction retourne NordOuest
-Direction coteTangent(const Position& a, const Position b)
+Direction coteTangent(const Position& a, const Position& b)
 {
 	if (a.estAdjacente(b)) {
 		for (int i = 0; i < 6; ++i) {
