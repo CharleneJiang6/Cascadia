@@ -58,18 +58,44 @@ const Direction getDirectionOpposee(Direction dir);
 //si cette fonction suivante ne marche pas, alors il faut vérifier que la version de l'IDE est au moins C++17
 Direction coteTangent(const Position& a, const Position b);
 
+void testClassePosition();
+
 
 class Tuile {
-	array<Habitat, 2> paysages;
-	array<Faune,3> faunes;
+	array<Habitat, 6> habitats;
+	vector<Faune> faunes; //un vector est adapté étant donné que le nombre de faunes varient entre 1 et 3
+	bool donneJetonNature;
 	bool jetonPlace;
+	Position* position; //composition
+
 
 public:
-	//definir getter, setter, constructeur, methodes
 
-	bool donneJetonNature() const { return faunes.size() == 1; }
+	//constructeur principal
+	Tuile(	const array<Habitat,6>& habitats, 
+			const vector<Faune>& faunes, 
+			bool nature = false, 
+			bool jetonPresent = false,
+			Position* p = nullptr) 
+			: habitats(habitats), faunes(faunes), 
+			  donneJetonNature(nature), jetonPlace(jetonPresent), position(p) {
+		if (faunes.size() < 1 && faunes.size() > 3)
+			throw "Une tuile doit avoir entre 1 et 3 faunes.";
+	}
+
+	///TODO ? un constructeur specifique pour extraire JSON?
+
+	///TODO: definir les getters
+
+
+	///TODO : definir les methodes
+	void confirmerPlacement();
+	void pivoterSensHoraire();
+	void pivoterSensAntiHoraire();
 
 };
+
+///TODO : cout << Tuile ?
 
 class JetonFaune {
 	Faune type;
