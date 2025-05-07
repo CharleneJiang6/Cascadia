@@ -136,3 +136,10 @@ void testClassePosition(){
 	cout << (direction_vecteur[static_cast<int>(coteTangent(p, q))]);
 }
 
+void Tuile::pivoterHoraire() {
+	rotate(habitats.rbegin(), habitats.rbegin() + 1, habitats.rend());
+}
+
+void Tuile::pivoterAntiHoraire() {
+	rotate(habitats.begin(), habitats.begin() + 1, habitats.end());
+}

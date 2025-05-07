@@ -3,7 +3,7 @@
 #include <vector>
 #include <stack>
 #include <array>
-#include <optional>
+#include <algorithm>
 
 using namespace std;
 
@@ -66,8 +66,8 @@ class Tuile {
 	vector<Faune> faunes; //un vector est adapté étant donné que le nombre de faunes varient entre 1 et 3
 	bool donneJetonNature;
 	bool jetonPlace;
-	Position* position; //composition
-
+	unique_ptr<Position> position; //composition
+	bool placementConfirme;
 
 public:
 
@@ -76,26 +76,39 @@ public:
 			const vector<Faune>& faunes, 
 			bool nature = false, 
 			bool jetonPresent = false,
-			Position* p = nullptr) 
+			Position* p = nullptr,
+			int rot = 0,
+			bool place = false) 
 			: habitats(habitats), faunes(faunes), 
-			  donneJetonNature(nature), jetonPlace(jetonPresent), position(p) {
+			  donneJetonNature(nature), jetonPlace(jetonPresent), 
+			  position(p), placementConfirme(place) {
 		if (faunes.size() < 1 && faunes.size() > 3)
 			throw "Une tuile doit avoir entre 1 et 3 faunes.";
 	}
 
 	///TODO ? un constructeur specifique pour extraire JSON?
 
-	///getters
 	const array<Habitat, 6>& getHabitats() const { return habitats; }
 	const vector<Faune>& getFaunes() const { return faunes; }
 	bool getDonneJetonNature() const { return faunes.size() == 1; }
 	bool getJetonPlace() const { return jetonPlace; }
-	const Position& getPosition() const { return *position; }
+	const Position& getPosition() const { return *(position.get()); }
+	bool getPlacementConfirme() const { return placementConfirme; }
 
-	///TODO : definir les methodes
-	void confirmerPlacement();
-	void pivoterSensHoraire();
-	void pivoterSensAntiHoraire();
+
+	void setPosition(int q, int r, int s) {
+		position = make_unique<Position>(q, r, s);
+	}
+
+	void setJetonPlace() {
+		if (!jetonPlace) jetonPlace = true;
+	}
+
+	void confirmerPlacement() { placementConfirme = true; }
+
+	void pivoterHoraire();
+
+	void pivoterAntiHoraire();
 
 };
 
