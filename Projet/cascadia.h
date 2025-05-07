@@ -74,32 +74,44 @@ public:
 class JetonFaune {
 	Faune type;
 public:
-	//getters 
+	
+	JetonFaune(Faune type) : type(type) {}
 	Faune getFaune() const { return type; };
-	// + constructeur
-	JetonFaune(Faune type): type(type){}
+
+	void setType(const string& t); 
+	///TODO setType: definir la fonction en faisant des verifs avant si le type est connu parmi les Faunes définies
+
 };
 
+///TODO: cout << JetonFaune
+
+
+/// Classe abstraite avec méthode virtuelle pure
 class CarteMarquage {
 	Faune faune;
 
 public :
-	virtual int methodeCalcul() { return 0; };
-	//getters + constructeur
+	virtual int methodeCalcul() const = 0;
+	///TODO : getter
+	///TODO : constructeur
 };
 
 class CarteSaumon : public CarteMarquage {
 
 };
+
 class CarteOurs : public CarteMarquage {
 
 };
+
 class CarteBuse : public CarteMarquage {
 
 };
+
 class CarteRenard : public CarteMarquage {
 
 };
+
 class CarteWapiti : public CarteMarquage {
 	
 };
