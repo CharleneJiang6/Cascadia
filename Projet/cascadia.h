@@ -85,8 +85,12 @@ public:
 
 	///TODO ? un constructeur specifique pour extraire JSON?
 
-	///TODO: definir les getters
-
+	///getters
+	const array<Habitat, 6>& getHabitats() const { return habitats; }
+	const vector<Faune>& getFaunes() const { return faunes; }
+	bool getDonneJetonNature() const { return faunes.size() == 1; }
+	bool getJetonPlace() const { return jetonPlace; }
+	const Position& getPosition() const { return *position; }
 
 	///TODO : definir les methodes
 	void confirmerPlacement();
