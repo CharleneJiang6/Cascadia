@@ -74,34 +74,14 @@ public:
 class JetonFaune {
 	Faune type;
 public:
-	//getters 
-	Faune getFaune() const { return type; };
-	// + constructeur
-	JetonFaune(Faune type): type(type){}
+	//getters + constructeur
 };
 
 class CarteMarquage {
 	Faune faune;
 
 public :
-	virtual int methodeCalcul() { return 0; };
 	//getters + constructeur
-};
-
-class CarteSaumon : public CarteMarquage {
-
-};
-class CarteOurs : public CarteMarquage {
-
-};
-class CarteBuse : public CarteMarquage {
-
-};
-class CarteRenard : public CarteMarquage {
-
-};
-class CarteWapiti : public CarteMarquage {
-	
 };
 
 class Pioche {
