@@ -4,11 +4,12 @@
 #include <stack>
 #include <array>
 #include <algorithm>
+#include <optional>
 
 using namespace std;
 
 enum class Habitat { marais, fleuve, montagne, prairie, foret };
-enum class Faune { saumon, ours, buse, renard, wapiti };
+enum class Faune { saumon, ours, buse, renard, wapiti, rien };
 
 enum class Direction { NordEst = 0, Est = 1, SudEst = 2, SudOuest = 3, Ouest = 4, NordOuest = 5, Inconnue = -1};
 
@@ -65,7 +66,7 @@ class Tuile {
 	array<Habitat, 6> habitats;
 	vector<Faune> faunes; //un vector est adapté étant donné que le nombre de faunes varient entre 1 et 3
 	bool donneJetonNature;
-	bool jetonPlace;
+	optional<Faune> faunePlace;
 	unique_ptr<Position> position; //composition
 	bool placementConfirme;
 
@@ -80,7 +81,7 @@ public:
 			int rot = 0,
 			bool place = false) 
 			: habitats(habitats), faunes(faunes), 
-			  donneJetonNature(nature), jetonPlace(jetonPresent), 
+			  donneJetonNature(nature), faunePlace(nullopt),
 			  position(p), placementConfirme(place) {
 		if (faunes.size() < 1 && faunes.size() > 3)
 			throw "Une tuile doit avoir entre 1 et 3 faunes.";
@@ -91,7 +92,8 @@ public:
 	const array<Habitat, 6>& getHabitats() const { return habitats; }
 	const vector<Faune>& getFaunes() const { return faunes; }
 	bool getDonneJetonNature() const { return faunes.size() == 1; }
-	bool getJetonPlace() const { return jetonPlace; }
+	bool JetonFaunePresent() const { return faunePlace.has_value(); }
+	Faune getFaunePlace() const { return faunePlace.value_or(Faune::rien); }
 	const Position& getPosition() const { return *(position.get()); }
 	bool getPlacementConfirme() const { return placementConfirme; }
 
@@ -100,8 +102,8 @@ public:
 		position = make_unique<Position>(q, r, s);
 	}
 
-	void setJetonPlace() {
-		if (!jetonPlace) jetonPlace = true;
+	void setJetonPlace(Faune jeton) {
+		if (!JetonFaunePresent()) faunePlace = jeton;
 	}
 
 	void confirmerPlacement() { placementConfirme = true; }
