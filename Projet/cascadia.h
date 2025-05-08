@@ -7,8 +7,10 @@
 #include <algorithm>
 #include <optional>
 #include <unordered_map>
-#include <json/json.h>
+#include <fstream>
 
+
+#include <json\json.h>
 using namespace std;
 
 enum class Habitat { marais, fleuve, montagne, prairie, foret };
@@ -197,34 +199,7 @@ public:
 
 class GestionInstanciation {
 public:
-	vector<Tuile> instancierTuiles(const string& jsonFilePath) {
-		ifstream file(jsonFilePath);
-		if (!file.is_open()) {
-			throw runtime_error("Impossible d'ouvrir le fichier JSON.");
-		}
-
-		Json::Value root;
-		file >> root;
-
-		vector<Tuile> tuiles;
-
-		for (const auto& t : root["tuiles"]) {
-			array<Habitat, 6> habitats;
-			for (size_t i = 0; i < 6; ++i) {
-				habitats[i] = stringToHabitat(t["habitats"][i].asString());
-			}
-
-			vector<Faune> faunes;
-			for (const auto& faune : t["faunes"]) {
-				faunes.push_back(stringToFaune(faune.asString()));
-			}
-
-			bool donneJetonNature = stringToBool(t["donneJetonNature"].asString());
-			tuiles.emplace_back(habitats, faunes, donneJetonNature);
-		}
-
-		return tuiles;
-	}
+	vector<Tuile> instancierTuiles(const string& fileName);
 
 	bool stringToBool(const string& str) {
 		return str == "true";

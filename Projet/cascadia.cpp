@@ -251,3 +251,32 @@ ostream& operator<<(ostream& os, const JetonFaune& j) {
 	os << fauneToString(j.getType());
 	return os;
 }
+
+vector<Tuile> GestionInstanciation::instancierTuiles(const string& fileName) {
+	ifstream file(fileName);
+	if (!file.is_open()) {
+		throw runtime_error("Impossible d'ouvrir le fichier JSON.");
+	}
+
+	Json::Value root;
+	file >> root;
+
+	vector<Tuile> tuiles;
+
+	for (const auto& t : root["tuiles"]) {
+		array<Habitat, 6> habitats;
+		for (size_t i = 0; i < 6; ++i) {
+			habitats[i] = stringToHabitat(t["habitats"][i].asString());
+		}
+
+		vector<Faune> faunes;
+		for (const auto& faune : t["faunes"]) {
+			faunes.push_back(stringToFaune(faune.asString()));
+		}
+
+		bool donneJetonNature = stringToBool(t["donneJetonNature"].asString());
+		tuiles.emplace_back(habitats, faunes, donneJetonNature);
+	}
+
+	return tuiles;
+}
