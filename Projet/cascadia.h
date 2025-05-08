@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <optional>
 #include <unordered_map>
+#include <json/json.h>
 
 using namespace std;
 
@@ -192,4 +193,58 @@ public:
 	//getters
 	//setters
 	//methods
+};
+
+class GestionInstanciation {
+public:
+	vector<Tuile> instancierTuiles(const string& jsonFilePath) {
+		ifstream file(jsonFilePath);
+		if (!file.is_open()) {
+			throw runtime_error("Impossible d'ouvrir le fichier JSON.");
+		}
+
+		Json::Value root;
+		file >> root;
+
+		vector<Tuile> tuiles;
+
+		for (const auto& t : root["tuiles"]) {
+			array<Habitat, 6> habitats;
+			for (size_t i = 0; i < 6; ++i) {
+				habitats[i] = stringToHabitat(t["habitats"][i].asString());
+			}
+
+			vector<Faune> faunes;
+			for (const auto& faune : t["faunes"]) {
+				faunes.push_back(stringToFaune(faune.asString()));
+			}
+
+			bool donneJetonNature = stringToBool(t["donneJetonNature"].asString());
+			tuiles.emplace_back(habitats, faunes, donneJetonNature);
+		}
+
+		return tuiles;
+	}
+
+	bool stringToBool(const string& str) {
+		return str == "true";
+	}
+
+	Habitat stringToHabitat(const string& s) {
+		if (s == "marais") return Habitat::marais;
+		if (s == "fleuve") return Habitat::fleuve;
+		if (s == "montagne") return Habitat::montagne;
+		if (s == "prairie") return Habitat::prairie;
+		if (s == "forêt") return Habitat::foret;
+		throw invalid_argument("Habitat inconnu: " + s);
+	}
+
+	Faune stringToFaune(const string& s) {
+		if (s == "saumon") return Faune::saumon;
+		if (s == "ours") return Faune::ours;
+		if (s == "buse") return Faune::buse;
+		if (s == "renard") return Faune::renard;
+		if (s == "wapiti") return Faune::wapiti;
+		return Faune::rien; // default case
+	}
 };
