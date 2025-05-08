@@ -53,13 +53,18 @@ public:
 
 };
 
-ostream& operator<<(ostream& flux, const Position& p);
+ostream& operator<<(ostream& flux, const Position& p); //afficher une Position
+
+string directionToString(Direction dir);
+
+ostream& operator<<(ostream& flux, Direction d); //afficher une Position
 
 extern const vector <Position> direction_vecteur;
 
-const Direction getDirectionOpposee(Direction dir);
+Direction getDirectionOpposee(Direction dir);
 
-Direction coteTangent(const Position& a, const Position b);
+//si cette fonction suivante ne marche pas, alors il faut vérifier que la version de l'IDE est au moins C++17
+Direction coteTangent(const Position& a, const Position& b);
 
 void testClassePosition();
 
