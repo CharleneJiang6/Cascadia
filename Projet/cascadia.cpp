@@ -2,6 +2,8 @@
 #include "cascadia.h"
 using namespace std;
 
+//POSITION
+
 ostream& operator<<(ostream& flux, const Position& p)
 {
 	flux << "(" << p.getQ() << "," << p.getR() << "," << p.getS() << ")";
@@ -43,6 +45,7 @@ Direction coteTangent(const Position& a, const Position b)
 
 	return Direction::Inconnue; 
 }
+
 
 vector<Position> Position::getVecteurPositionsAdjacentes() const {
 	return {
@@ -92,3 +95,50 @@ const std::vector<Position> direction_vecteur = {
 	Position(-1, 0, 1), //Ouest,4
 	Position(0, -1, 1)  //NordOuest,5
 };
+
+//JETON FAUNE
+void JetonFaune::setType(const string& t) {
+	if (t == "saumon") {
+		type = Faune::saumon;
+	}
+	else if (t == "ours") {
+		type = Faune::ours;
+	}
+	else if (t == "buse") {
+		type = Faune::buse;
+	}
+	else if (t == "renard") {
+		type = Faune::renard;
+	}
+	else if (t == "wapiti") {
+		type = Faune::wapiti;
+	}
+	else {
+		throw std::invalid_argument("Type faune invalide: "+t);
+	}
+}
+
+std::ostream& operator<<(std::ostream& os, const JetonFaune& j)
+{
+	switch (j.JetonFaune::getType()) {
+	case Faune::saumon:
+		os << "saumon";
+		break;
+	case Faune::ours:
+		os << "ours";
+		break;
+	case Faune::buse:
+		os << "buse";
+		break;
+	case Faune::renard:
+		os << "renard";
+		break;
+	case Faune::wapiti:
+		os << "wapiti";
+		break;
+	default:
+		os << "inconnu";
+		break;
+	}
+	return os;
+}

@@ -74,16 +74,13 @@ public:
 class JetonFaune {
 	Faune type;
 public:
-	
 	JetonFaune(Faune type) : type(type) {}
-	Faune getFaune() const { return type; };
-
+	Faune getType() const { return type; };
 	void setType(const string& t); 
-	///TODO setType: definir la fonction en faisant des verifs avant si le type est connu parmi les Faunes définies
 
 };
 
-///TODO: cout << JetonFaune
+std::ostream& operator<<(std::ostream& os, const JetonFaune& j);
 
 
 /// Classe abstraite avec méthode virtuelle pure
