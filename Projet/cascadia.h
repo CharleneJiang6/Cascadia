@@ -8,7 +8,7 @@
 using namespace std;
 
 enum class Habitat { marais, fleuve, montagne, prairie, foret };
-enum class Faune { saumon, ours, buse, renard, wapiti };
+enum class Faune { saumon, ours, buse, renard, wapiti, rien };
 
 enum class Direction { NordEst = 0, Est = 1, SudEst = 2, SudOuest = 3, Ouest = 4, NordOuest = 5, Inconnue = -1};
 
@@ -76,7 +76,6 @@ class JetonFaune {
 public:
 	JetonFaune(Faune type) : type(type) {}
 	Faune getType() const { return type; };
-	void setType(const string& t); 
 };
 
 ostream& operator<<(ostream& os, const JetonFaune& j); //afficher un jeton faune

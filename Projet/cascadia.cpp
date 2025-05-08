@@ -96,26 +96,15 @@ const std::vector<Position> direction_vecteur = {
 	Position(0, -1, 1)  //NordOuest,5
 };
 
-//JETON FAUNE
-void JetonFaune::setType(const string& t) {
-	if (t == "saumon") {
-		type = Faune::saumon;
-	}
-	else if (t == "ours") {
-		type = Faune::ours;
-	}
-	else if (t == "buse") {
-		type = Faune::buse;
-	}
-	else if (t == "renard") {
-		type = Faune::renard;
-	}
-	else if (t == "wapiti") {
-		type = Faune::wapiti;
-	}
-	else {
-		throw std::invalid_argument("Type faune invalide: "+t);
-	}
+
+Faune stringToFaune(const string& s) {
+	if (s == "saumon")      return Faune::saumon;
+	else if (s == "ours")   return Faune::ours;
+	else if (s == "buse")   return Faune::buse;
+	else if (s == "renard") return Faune::renard;
+	else if (s == "wapiti") return Faune::wapiti;
+	else if (s == "rien")	return Faune::rien;
+	else throw std::invalid_argument("Faune inconnu : " + s);
 }
 
 ostream& operator<<(ostream& os, const JetonFaune& j)
