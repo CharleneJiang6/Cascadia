@@ -121,7 +121,7 @@ public:
 
 	// verification si pioche contient au moins un type de JetonFaune de cardinalité == nombre fois
 	// fauneCount les faunes indice dans l'ordre de Enum Class
-	bool aIdentiqueJeton(int nombre) const;
+	bool contientJetonIdentique(int nombre) const;
 
 	int retourneIndiceFaune(Faune type) const;
 
