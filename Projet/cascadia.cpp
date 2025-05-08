@@ -2,8 +2,6 @@
 #include "cascadia.h"
 using namespace std;
 
-//POSITION
-
 ostream& operator<<(ostream& flux, const Position& p)
 {
 	flux << "(" << p.getQ() << "," << p.getR() << "," << p.getS() << ")";
@@ -31,6 +29,16 @@ string fauneToString(Faune faune) {
 	case Faune::rien:			return "rien";
 	default:                    return "rien";
 	}
+}
+
+Faune stringToFaune(const string& s) {
+	if (s == "saumon")      return Faune::saumon;
+	else if (s == "ours")   return Faune::ours;
+	else if (s == "buse")   return Faune::buse;
+	else if (s == "renard") return Faune::renard;
+	else if (s == "wapiti") return Faune::wapiti;
+	else if (s == "rien")	return Faune::rien;
+	else throw std::invalid_argument("Faune inconnu : " + s);
 }
 
 string directionToString(Direction dir) {
@@ -129,16 +137,6 @@ const std::vector<Position> direction_vecteur = {
 	Position(0, -1, 1)  //NordOuest,5
 };
 
-Faune stringToFaune(const string& s) {
-	if (s == "saumon")      return Faune::saumon;
-	else if (s == "ours")   return Faune::ours;
-	else if (s == "buse")   return Faune::buse;
-	else if (s == "renard") return Faune::renard;
-	else if (s == "wapiti") return Faune::wapiti;
-	else if (s == "rien")	return Faune::rien;
-	else throw std::invalid_argument("Faune inconnu : " + s);
-}
-
 void testClassePosition(){
 	//test Position
 	Position p(1, 0, -1);
@@ -216,7 +214,7 @@ void Tuile::placerJetonFaune(Faune faune) {
 	if (!JetonFaunePresent() && find(faunes.begin(), faunes.end(), faune) != faunes.end())
 		faunePlace = faune;
 	else
-		throw "!La faune ne peut pas être placée ici!\n";
+		throw std::invalid_argument("!La faune ne peut pas être placée ici!\n");
 }
 
 void Tuile::pivoterHoraire() {
@@ -247,4 +245,9 @@ void testClasseTuile() {
 	t.pivoterAntiHoraire();
 
 	cout << t;
+}
+
+ostream& operator<<(ostream& os, const JetonFaune& j) {
+	os << fauneToString(j.getType());
+	return os;
 }
