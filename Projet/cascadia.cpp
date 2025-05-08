@@ -8,6 +8,29 @@ ostream& operator<<(ostream& flux, const Position& p)
 	return flux;
 }
 
+string habitatToString(Habitat habitat) {
+	switch (habitat) {
+	case Habitat::marais:       return "marais";
+	case Habitat::fleuve:		return "fleuve";
+	case Habitat::montagne:		return "montagne";
+	case Habitat::prairie:		return "prairie";
+	case Habitat::foret:		return "foret";
+	default:                    return "rien";
+	}
+}
+
+string fauneToString(Faune faune) {
+	switch (faune) {
+	case Faune::saumon:			return "saumon";
+	case Faune::ours:			return "ours";
+	case Faune::buse:			return "buse";
+	case Faune::renard:			return "renard";
+	case Faune::wapiti:			return "wapiti";
+	case Faune::rien:			return "rien";
+	default:                    return "rien";
+	}
+}
+
 string directionToString(Direction dir) {
 	switch (dir) {
 	case Direction::Est:       return "Est";
@@ -20,8 +43,17 @@ string directionToString(Direction dir) {
 	}
 }
 
-ostream& operator<<(ostream& flux, const Direction& d)
-{
+ostream& operator<<(ostream& flux, Habitat h) {
+	flux << habitatToString(h);
+	return flux;
+}
+
+ostream& operator<<(ostream& flux, Faune f) {
+	flux << fauneToString(f);
+	return flux;
+}
+
+ostream& operator<<(ostream& flux, Direction d) {
 	flux << directionToString(d);
 	return flux;
 }
@@ -136,10 +168,69 @@ void testClassePosition(){
 	cout << (direction_vecteur[static_cast<int>(coteTangent(p, q))]);
 }
 
+ostream& operator<<(ostream& flux, const Tuile& tuile) {
+	const auto& habitats = tuile.getHabitats();
+	const auto& faunes = tuile.getFaunes();
+
+	flux << "TUILE : \n";
+
+	flux << "\t- Habitats : ";
+	for (Habitat h : habitats) {
+		flux << habitatToString(h) << ", ";
+	}
+	flux << "\n";
+
+	flux << "\t- Faunes : ";
+	for (Faune f : faunes) {
+		flux << fauneToString(f) << ", ";
+	}
+	flux << "\n";
+
+	if (tuile.getPlacementConfirme())
+		flux << "\t- Position : " << tuile.getPosition() << "\n";
+
+	if (tuile.getDonneJetonNature())
+		flux << "\t- Donne Jeton Nature.\n";
+
+	if (tuile.JetonFaunePresent())
+		flux << "\t- Faune placée : " << fauneToString(tuile.getFaunePlace()) << ".\n";
+
+	return flux;
+}
+
+void Tuile::placerJetonFaune(Faune faune) {
+	if (!JetonFaunePresent() && find(faunes.begin(), faunes.end(), faune) != faunes.end())
+		faunePlace = faune;
+	else
+		throw "!La faune ne peut pas être placée ici!\n";
+}
+
 void Tuile::pivoterHoraire() {
 	rotate(habitats.rbegin(), habitats.rbegin() + 1, habitats.rend());
 }
 
 void Tuile::pivoterAntiHoraire() {
 	rotate(habitats.begin(), habitats.begin() + 1, habitats.end());
+}
+
+
+void testClasseTuile() {
+	array<Habitat, 6> hab = {Habitat::fleuve, Habitat::fleuve, Habitat::fleuve, 
+							Habitat::foret, Habitat::foret, Habitat::foret} ;
+	vector<Faune> fau = { Faune::buse,Faune::renard,Faune::ours };
+	
+	Tuile t = Tuile(hab, fau);
+
+	try {
+		t.placerJetonFaune(Faune::buse);
+	} catch (const char* e) {
+		cout << e;
+	}
+
+	t.setPosition(0, 1, -1);
+	t.confirmerPlacement();
+	t.pivoterHoraire();
+	t.pivoterAntiHoraire();
+
+	cout << t;
 }

@@ -1,4 +1,5 @@
 #pragma once
+///Veuillez vous assurer que la version de votre IDE est au moins C++17 avant de compiler.
 #include <iostream>
 #include <vector>
 #include <stack>
@@ -10,8 +11,15 @@ using namespace std;
 
 enum class Habitat { marais, fleuve, montagne, prairie, foret };
 enum class Faune { saumon, ours, buse, renard, wapiti, rien };
-
 enum class Direction { NordEst = 0, Est = 1, SudEst = 2, SudOuest = 3, Ouest = 4, NordOuest = 5, Inconnue = -1};
+
+string habitatToString(Habitat habitat);
+string fauneToString(Faune faune);
+string directionToString(Direction dir);
+
+ostream& operator<<(ostream& flux, Habitat h);
+ostream& operator<<(ostream& flux, Faune f);
+ostream& operator<<(ostream& flux, Direction d);
 
 class Position {
 
@@ -45,18 +53,12 @@ public:
 
 };
 
-ostream& operator<<(ostream& flux, const Position& p); //afficher une Position
-
-string directionToString(Direction dir);
-
-ostream& operator<<(ostream& flux, const Direction& d); //afficher une Position
-
+ostream& operator<<(ostream& flux, const Position& p);
 
 extern const vector <Position> direction_vecteur;
 
 const Direction getDirectionOpposee(Direction dir);
 
-//si cette fonction suivante ne marche pas, alors il faut vérifier que la version de l'IDE est au moins C++17
 Direction coteTangent(const Position& a, const Position b);
 
 void testClassePosition();
@@ -78,7 +80,6 @@ public:
 			bool nature = false, 
 			bool jetonPresent = false,
 			Position* p = nullptr,
-			int rot = 0,
 			bool place = false) 
 			: habitats(habitats), faunes(faunes), 
 			  donneJetonNature(nature), faunePlace(nullopt),
@@ -91,7 +92,7 @@ public:
 
 	const array<Habitat, 6>& getHabitats() const { return habitats; }
 	const vector<Faune>& getFaunes() const { return faunes; }
-	bool getDonneJetonNature() const { return faunes.size() == 1; }
+	bool getDonneJetonNature() const { return donneJetonNature; }
 	bool JetonFaunePresent() const { return faunePlace.has_value(); }
 	Faune getFaunePlace() const { return faunePlace.value_or(Faune::rien); }
 	const Position& getPosition() const { return *(position.get()); }
@@ -102,9 +103,7 @@ public:
 		position = make_unique<Position>(q, r, s);
 	}
 
-	void setJetonPlace(Faune jeton) {
-		if (!JetonFaunePresent()) faunePlace = jeton;
-	}
+	void placerJetonFaune(Faune faune);
 
 	void confirmerPlacement() { placementConfirme = true; }
 
@@ -114,7 +113,9 @@ public:
 
 };
 
-///TODO : cout << Tuile ?
+ostream& operator<<(ostream& flux, const Tuile& tuile);
+
+void testClasseTuile();
 
 class JetonFaune {
 	Faune type;

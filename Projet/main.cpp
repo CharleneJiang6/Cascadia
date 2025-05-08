@@ -4,8 +4,9 @@ using namespace std;
 #include <unordered_map>
 
 int main() {
-	cout << "hello world" << endl;
+	cout << "hello world\n" << endl;
 	
+	//testClassePosition();
 
-	testClassePosition();
+	testClasseTuile();
 }
