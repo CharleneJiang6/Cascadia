@@ -118,26 +118,26 @@ void JetonFaune::setType(const string& t) {
 	}
 }
 
-std::ostream& operator<<(std::ostream& os, const JetonFaune& j)
+ostream& operator<<(ostream& os, const JetonFaune& j)
 {
 	switch (j.JetonFaune::getType()) {
 	case Faune::saumon:
-		os << "saumon";
+		os << "Jeton saumon";
 		break;
 	case Faune::ours:
-		os << "ours";
+		os << "Jeton ours";
 		break;
 	case Faune::buse:
-		os << "buse";
+		os << "Jeton buse";
 		break;
 	case Faune::renard:
-		os << "renard";
+		os << "Jeton renard";
 		break;
 	case Faune::wapiti:
-		os << "wapiti";
+		os << "Jeton wapiti";
 		break;
 	default:
-		os << "inconnu";
+		os << "Jeton inconnu";
 		break;
 	}
 	return os;

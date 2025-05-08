@@ -77,10 +77,9 @@ public:
 	JetonFaune(Faune type) : type(type) {}
 	Faune getType() const { return type; };
 	void setType(const string& t); 
-
 };
 
-std::ostream& operator<<(std::ostream& os, const JetonFaune& j);
+ostream& operator<<(ostream& os, const JetonFaune& j); //afficher un jeton faune
 
 
 /// Classe abstraite avec méthode virtuelle pure
