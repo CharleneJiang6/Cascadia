@@ -100,7 +100,8 @@ public:
 
 
 	void setPosition(int q, int r, int s) {
-		position = make_unique<Position>(q, r, s);
+		if (! placementConfirme)
+			position = make_unique<Position>(q, r, s);
 	}
 
 	void placerJetonFaune(Faune faune);
