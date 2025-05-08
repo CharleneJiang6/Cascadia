@@ -10,6 +10,29 @@ ostream& operator<<(ostream& flux, const Position& p)
 	return flux;
 }
 
+string habitatToString(Habitat habitat) {
+	switch (habitat) {
+	case Habitat::marais:       return "marais";
+	case Habitat::fleuve:		return "fleuve";
+	case Habitat::montagne:		return "montagne";
+	case Habitat::prairie:		return "prairie";
+	case Habitat::foret:		return "foret";
+	default:                    return "rien";
+	}
+}
+
+string fauneToString(Faune faune) {
+	switch (faune) {
+	case Faune::saumon:			return "saumon";
+	case Faune::ours:			return "ours";
+	case Faune::buse:			return "buse";
+	case Faune::renard:			return "renard";
+	case Faune::wapiti:			return "wapiti";
+	case Faune::rien:			return "rien";
+	default:                    return "rien";
+	}
+}
+
 string directionToString(Direction dir) {
 	switch (dir) {
 	case Direction::Est:       return "Est";
@@ -22,18 +45,28 @@ string directionToString(Direction dir) {
 	}
 }
 
-ostream& operator<<(ostream& flux, const Direction& d)
-{
+ostream& operator<<(ostream& flux, Habitat h) {
+	flux << habitatToString(h);
+	return flux;
+}
+
+ostream& operator<<(ostream& flux, Faune f) {
+	flux << fauneToString(f);
+	return flux;
+}
+
+ostream& operator<<(ostream& flux, Direction d) {
+
 	flux << directionToString(d);
 	return flux;
 }
 
-const Direction getDirectionOpposee(Direction dir) {
+Direction getDirectionOpposee(Direction dir) {
 	return static_cast<Direction>((static_cast<int>(dir) + 3) % 6);
 }
 
 //par exemple, sur le coté NordOuest de a se trouve b, alors la fonction retourne NordOuest
-Direction coteTangent(const Position& a, const Position b)
+Direction coteTangent(const Position& a, const Position& b)
 {
 	if (a.estAdjacente(b)) {
 		for (int i = 0; i < 6; ++i) {
@@ -96,7 +129,6 @@ const std::vector<Position> direction_vecteur = {
 	Position(0, -1, 1)  //NordOuest,5
 };
 
-
 Faune stringToFaune(const string& s) {
 	if (s == "saumon")      return Faune::saumon;
 	else if (s == "ours")   return Faune::ours;
@@ -107,27 +139,112 @@ Faune stringToFaune(const string& s) {
 	else throw std::invalid_argument("Faune inconnu : " + s);
 }
 
-ostream& operator<<(ostream& os, const JetonFaune& j)
-{
-	switch (j.JetonFaune::getType()) {
-	case Faune::saumon:
-		os << "Jeton saumon";
-		break;
-	case Faune::ours:
-		os << "Jeton ours";
-		break;
-	case Faune::buse:
-		os << "Jeton buse";
-		break;
-	case Faune::renard:
-		os << "Jeton renard";
-		break;
-	case Faune::wapiti:
-		os << "Jeton wapiti";
-		break;
-	default:
-		os << "Jeton inconnu";
-		break;
+void testClassePosition(){
+	//test Position
+	Position p(1, 0, -1);
+	cout << p;
+
+	Position q(0, 0, 0);
+	cout << q << endl;
+
+	//cout << p.estAdjacente(q) << endl;
+
+	//cout << (p == q) << endl;
+	//cout << (p != q) << endl;
+	//
+	//cout << p.getPositionsAdjacentes().at(0);
+
+	//cout << (p + q);
+
+	//vector <Position> direction_vecteur = {
+	//{+1, -1, 0},
+	//{+1, 0, -1},
+	//{0, +1, -1},
+	//{-1, +1, 0},
+	//{-1, 0, +1},
+	//{0, -1, +1}
+	//};
+
+
+	//Position est = direction_vecteur[static_cast<int>(Direction::Est)];  
+	//int inco = static_cast<int>(Direction::Inconnue);
+
+	//cout << inco << "\n\n";// (+1, -1, 0)
+
+	//cout << (q = direction_vecteur[static_cast<int>(Direction::SudOuest)]);
+
+	//cout << p.getPositionAdjacente(Direction::SudOuest);
+
+	//cout << (direction_vecteur[static_cast<int>(getDirectionOpposee(Direction::NordEst))]);
+
+	//cout << directionToString(Direction::NordEst);
+
+	cout << (direction_vecteur[static_cast<int>(coteTangent(p, q))]);
+}
+
+ostream& operator<<(ostream& flux, const Tuile& tuile) {
+	const auto& habitats = tuile.getHabitats();
+	const auto& faunes = tuile.getFaunes();
+
+	flux << "TUILE : \n";
+
+	flux << "\t- Habitats : ";
+	for (Habitat h : habitats) {
+		flux << habitatToString(h) << ", ";
 	}
-	return os;
+	flux << "\n";
+
+	flux << "\t- Faunes : ";
+	for (Faune f : faunes) {
+		flux << fauneToString(f) << ", ";
+	}
+	flux << "\n";
+
+	if (tuile.getPlacementConfirme())
+		flux << "\t- Position : " << tuile.getPosition() << "\n";
+
+	if (tuile.getDonneJetonNature())
+		flux << "\t- Donne Jeton Nature.\n";
+
+	if (tuile.JetonFaunePresent())
+		flux << "\t- Faune placée : " << fauneToString(tuile.getFaunePlace()) << ".\n";
+
+	return flux;
+}
+
+void Tuile::placerJetonFaune(Faune faune) {
+	if (!JetonFaunePresent() && find(faunes.begin(), faunes.end(), faune) != faunes.end())
+		faunePlace = faune;
+	else
+		throw "!La faune ne peut pas être placée ici!\n";
+}
+
+void Tuile::pivoterHoraire() {
+	rotate(habitats.rbegin(), habitats.rbegin() + 1, habitats.rend());
+}
+
+void Tuile::pivoterAntiHoraire() {
+	rotate(habitats.begin(), habitats.begin() + 1, habitats.end());
+}
+
+
+void testClasseTuile() {
+	array<Habitat, 6> hab = {Habitat::fleuve, Habitat::fleuve, Habitat::fleuve, 
+							Habitat::foret, Habitat::foret, Habitat::foret} ;
+	vector<Faune> fau = { Faune::buse,Faune::renard,Faune::ours };
+	
+	Tuile t = Tuile(hab, fau);
+
+	try {
+		t.placerJetonFaune(Faune::buse);
+	} catch (const char* e) {
+		cout << e;
+	}
+
+	t.setPosition(0, 1, -1);
+	t.confirmerPlacement();
+	t.pivoterHoraire();
+	t.pivoterAntiHoraire();
+
+	cout << t;
 }
