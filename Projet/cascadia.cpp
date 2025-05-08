@@ -96,7 +96,7 @@ const std::vector<Position> direction_vecteur = {
 // les methodes de la classe Pioche
 // verification si pioche contient au moins un type de JetonFaune de cardinalité == count fois
 	// fauneCount les faunes indice dans l'ordre de Enum Class
-bool Pioche::aIdentiqueJeton(int nombre) const {
+bool Pioche::contientJetonIdentique(int nombre) const {
 	array<int, 5> fauneCount{0};
 	// compter respectivement le nb de chaque faune presente
 	for (const auto& pair : pioche) {
@@ -123,11 +123,11 @@ int Pioche::retourneIndiceFaune(Faune type) const {
 }
 
 bool Pioche::estTroisIdentique() const {
-	return aIdentiqueJeton(3);
+	return contientJetonIdentique(3);
 }
 
 bool Pioche::estQuatreIdentique() const {
-	return aIdentiqueJeton(4);
+	return contientJetonIdentique(4);
 }
 
 void Pioche::retirerPaire(size_t indice) {
