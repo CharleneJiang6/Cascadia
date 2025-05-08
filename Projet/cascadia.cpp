@@ -2,6 +2,8 @@
 #include "cascadia.h"
 using namespace std;
 
+//POSITION
+
 ostream& operator<<(ostream& flux, const Position& p)
 {
 	flux << "(" << p.getQ() << "," << p.getR() << "," << p.getS() << ")";
@@ -77,6 +79,7 @@ Direction coteTangent(const Position& a, const Position& b)
 	return Direction::Inconnue; 
 }
 
+
 vector<Position> Position::getVecteurPositionsAdjacentes() const {
 	return {
 		Position(q + 1, r, s - 1),    // Nord-Est, côté 0
@@ -125,6 +128,16 @@ const std::vector<Position> direction_vecteur = {
 	Position(-1, 0, 1), //Ouest,4
 	Position(0, -1, 1)  //NordOuest,5
 };
+
+Faune stringToFaune(const string& s) {
+	if (s == "saumon")      return Faune::saumon;
+	else if (s == "ours")   return Faune::ours;
+	else if (s == "buse")   return Faune::buse;
+	else if (s == "renard") return Faune::renard;
+	else if (s == "wapiti") return Faune::wapiti;
+	else if (s == "rien")	return Faune::rien;
+	else throw std::invalid_argument("Faune inconnu : " + s);
+}
 
 void testClassePosition(){
 	//test Position

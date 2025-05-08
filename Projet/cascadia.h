@@ -126,14 +126,41 @@ void testClasseTuile();
 class JetonFaune {
 	Faune type;
 public:
-	//getters + constructeur
+	JetonFaune(Faune type) : type(type) {}
+	Faune getType() const { return type; };
 };
 
+ostream& operator<<(ostream& os, const JetonFaune& j); //afficher un jeton faune
+
+
+/// Classe abstraite avec méthode virtuelle pure
 class CarteMarquage {
 	Faune faune;
 
 public :
-	//getters + constructeur
+	virtual int methodeCalcul() const = 0;
+	///TODO : getter
+	///TODO : constructeur
+};
+
+class CarteSaumon : public CarteMarquage {
+
+};
+
+class CarteOurs : public CarteMarquage {
+
+};
+
+class CarteBuse : public CarteMarquage {
+
+};
+
+class CarteRenard : public CarteMarquage {
+
+};
+
+class CarteWapiti : public CarteMarquage {
+	
 };
 
 class Pioche {
