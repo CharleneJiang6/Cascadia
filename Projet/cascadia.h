@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <fstream>
 #include <json\json.h>
+#include <random>
 using namespace std;
 
 enum class Habitat { marais, fleuve, montagne, prairie, foret };
@@ -198,26 +199,10 @@ public:
 class GestionInstanciation {
 public:
 	void instancierTuiles(const string& fileName, vector<Tuile>& tuiles);
-
+	void melangerTuiles(vector<Tuile>& tuiles);
 	bool stringToBool(const string& str) {
 		return str == "true";
 	}
-
-	Habitat stringToHabitat(const string& s) {
-		if (s == "marais") return Habitat::marais;
-		if (s == "fleuve") return Habitat::fleuve;
-		if (s == "montagne") return Habitat::montagne;
-		if (s == "prairie") return Habitat::prairie;
-		if (s == "forêt") return Habitat::foret;
-		throw invalid_argument("Habitat inconnu: " + s);
-	}
-
-	Faune stringToFaune(const string& s) {
-		if (s == "saumon") return Faune::saumon;
-		if (s == "ours") return Faune::ours;
-		if (s == "buse") return Faune::buse;
-		if (s == "renard") return Faune::renard;
-		if (s == "wapiti") return Faune::wapiti;
-		return Faune::rien; // default case
-	}
+	Habitat stringToHabitat(const string& s);
+	Tuile depilerTuile(vector<Tuile>& tuiles);
 };

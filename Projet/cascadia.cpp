@@ -263,10 +263,12 @@ void GestionInstanciation::instancierTuiles(const string& fileName, vector<Tuile
 
 	for (const auto& donnee : root["tuiles"]) {
 		array<Habitat, 6> habitats;
-		for (size_t i = 0; i < 6; ++i) {
-			for(auto habitat : donnee["habitats"])
+		size_t i = 0;
+		for (auto habitat : donnee["habitats"]) {
 			habitats[i] = stringToHabitat(habitat.asString());
+			i++;
 		}
+		
 
 		vector<Faune> faunes;
 		for (const auto& faune : donnee["faunes"]) {
@@ -276,4 +278,29 @@ void GestionInstanciation::instancierTuiles(const string& fileName, vector<Tuile
 		bool donneJetonNature = stringToBool(donnee["donneJetonNature"].asString());
 		tuiles.emplace_back(habitats, faunes, donneJetonNature);
 	}
+}
+
+Habitat GestionInstanciation::stringToHabitat(const string & s){
+	if (s == "marais") return Habitat::marais;
+	if (s == "fleuve") return Habitat::fleuve;
+	if (s == "montagne") return Habitat::montagne;
+	if (s == "prairie") return Habitat::prairie;
+	if (s == "forêt") return Habitat::foret;
+	throw invalid_argument("Habitat inconnu: " + s);
+}
+
+void GestionInstanciation::melangerTuiles(vector<Tuile>& tuiles) {
+	random_device rd;
+	mt19937 g(rd());
+	shuffle(tuiles.begin(), tuiles.end(), g);
+}
+
+Tuile GestionInstanciation::depilerTuile(vector<Tuile>& tuiles) {
+	if (tuiles.empty()) {
+		throw runtime_error("La pile est vide.");
+	}
+
+	Tuile tuile = move(tuiles.back()); // Move the tuile
+	tuiles.pop_back(); // Remove the tuile from the vector
+	return tuile; // Return the moved tuile
 }
