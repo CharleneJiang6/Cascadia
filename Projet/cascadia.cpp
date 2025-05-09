@@ -263,18 +263,19 @@ vector<Tuile> GestionInstanciation::instancierTuiles(const string& fileName) {
 
 	vector<Tuile> tuiles;
 
-	for (const auto& t : root["tuiles"]) {
+	for (const auto& donnee : root["tuiles"]) {
 		array<Habitat, 6> habitats;
 		for (size_t i = 0; i < 6; ++i) {
-			habitats[i] = stringToHabitat(t["habitats"][i].asString());
+			for(auto habitat : donnee["habitats"])
+			habitats[i] = stringToHabitat(habitat.asString());
 		}
 
 		vector<Faune> faunes;
-		for (const auto& faune : t["faunes"]) {
+		for (const auto& faune : donnee["faunes"]) {
 			faunes.push_back(stringToFaune(faune.asString()));
 		}
 
-		bool donneJetonNature = stringToBool(t["donneJetonNature"].asString());
+		bool donneJetonNature = stringToBool(donnee["donneJetonNature"].asString());
 		tuiles.emplace_back(habitats, faunes, donneJetonNature);
 	}
 

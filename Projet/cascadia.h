@@ -8,8 +8,6 @@
 #include <optional>
 #include <unordered_map>
 #include <fstream>
-
-
 #include <json\json.h>
 using namespace std;
 
