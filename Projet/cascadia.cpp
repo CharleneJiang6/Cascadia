@@ -252,7 +252,7 @@ ostream& operator<<(ostream& os, const JetonFaune& j) {
 	return os;
 }
 
-void GestionInstanciation::instancierTuiles(const string& fileName, vector<Tuile>& tuiles) {
+void GestionInstanciation::instancierTuiles(const string& fileName, vector<Tuile>& ensembleTuiles) {
 	ifstream file(fileName);
 	if (!file.is_open()) {
 		throw runtime_error("Impossible d'ouvrir le fichier JSON.");
@@ -268,15 +268,47 @@ void GestionInstanciation::instancierTuiles(const string& fileName, vector<Tuile
 			habitats[i] = stringToHabitat(habitat.asString());
 			i++;
 		}
-		
-
 		vector<Faune> faunes;
 		for (const auto& faune : donnee["faunes"]) {
 			faunes.push_back(stringToFaune(faune.asString()));
 		}
 
 		bool donneJetonNature = stringToBool(donnee["donneJetonNature"].asString());
-		tuiles.emplace_back(habitats, faunes, donneJetonNature);
+		ensembleTuiles.emplace_back(habitats, faunes, donneJetonNature);
+	}
+}
+
+void GestionInstanciation::instancierTripletsDepart(const string& fileName, vector<vector<Tuile>>& ensembleTripletsDepart) {
+	ifstream file(fileName);
+	if (!file.is_open()) {
+		throw runtime_error("Impossible d'ouvrir le fichier JSON.");
+	}
+
+	Json::Value root;
+	file >> root;
+
+	for (const auto& triplet : root["tuiles_depart"]) {
+		for (const auto& tuile : triplet["triplet"]) {
+			size_t j = 0;// j parcours de 0 a 2 pour l'indice respective des tuiles dans un triplet
+			vector<Tuile> tripletTuiles;
+			for (const auto& donnee : tuile["tuile"]){
+				array<Habitat, 6> habitats;
+				size_t i = 0; // i parcours de 0 a 5 pour les 6 types d'habitats
+				for (const auto& habitat : donnee["habitats"]) {
+					habitats[i] = stringToHabitat(habitat.asString());
+					i++;
+				}
+
+				vector<Faune> faunes;
+				for (const auto& faune : donnee["faunes"]) {
+					faunes.push_back(stringToFaune(faune.asString()));
+				}
+				bool donneJetonNature = donnee["donneJetonNature"].asBool();
+				tripletTuiles[j] = Tuile(habitats, faunes, donneJetonNature);
+				j++;
+			}
+			ensembleTripletsDepart.push_back(tripletTuiles);
+		}
 	}
 }
 

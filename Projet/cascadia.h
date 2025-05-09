@@ -198,7 +198,8 @@ public:
 
 class GestionInstanciation {
 public:
-	void instancierTuiles(const string& fileName, vector<Tuile>& tuiles);
+	void instancierTuiles(const string& fileName, vector<Tuile>& ensembleTuiles);
+	void instancierTripletsDepart(const string& fileName, vector<vector<Tuile>>& ensembleTripletsDepart);
 	void melangerTuiles(vector<Tuile>& tuiles);
 	bool stringToBool(const string& str) {
 		return str == "true";
