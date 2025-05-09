@@ -252,7 +252,7 @@ ostream& operator<<(ostream& os, const JetonFaune& j) {
 	return os;
 }
 
-vector<Tuile> GestionInstanciation::instancierTuiles(const string& fileName) {
+void GestionInstanciation::instancierTuiles(const string& fileName, vector<Tuile>& tuiles) {
 	ifstream file(fileName);
 	if (!file.is_open()) {
 		throw runtime_error("Impossible d'ouvrir le fichier JSON.");
@@ -260,8 +260,6 @@ vector<Tuile> GestionInstanciation::instancierTuiles(const string& fileName) {
 
 	Json::Value root;
 	file >> root;
-
-	vector<Tuile> tuiles;
 
 	for (const auto& donnee : root["tuiles"]) {
 		array<Habitat, 6> habitats;
@@ -278,6 +276,4 @@ vector<Tuile> GestionInstanciation::instancierTuiles(const string& fileName) {
 		bool donneJetonNature = stringToBool(donnee["donneJetonNature"].asString());
 		tuiles.emplace_back(habitats, faunes, donneJetonNature);
 	}
-
-	return tuiles;
 }

@@ -17,9 +17,10 @@ int main() {
     GestionInstanciation gestion;
 
     try {
-        vector<Tuile> tuiles = gestion.instancierTuiles("tuiles_non_reperes.json");
-        //vector<Tuile> tuiles = gestion.instancierTuiles("tuiles_reperes.json");
-        
+        vector<Tuile> tuiles;
+        gestion.instancierTuiles("tuiles_non_reperes.json", tuiles);
+        gestion.instancierTuiles("tuiles_reperes.json", tuiles);
+
         for (const auto& tuile : tuiles) {
             cout << tuile << endl;
         }
