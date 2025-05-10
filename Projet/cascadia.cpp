@@ -84,7 +84,7 @@ const Position Position::getPositionAdjacente(Direction direction) const
 	return Position(q + pos.getQ(), r + pos.getR(), s + pos.getS());
 }
 
-static const std::vector<Position> direction_vecteur = {
+const std::vector<Position> direction_vecteur = {
 	Position(1, -1, 0), //NordEst, 0
 	Position(1, 0, -1), //Est, 1
 	Position(0, 1, -1), //SudEst, 2
@@ -156,4 +156,35 @@ void Pioche::resetJetonFaune(const std::vector<int>& quiEnleverIndices) {
 			std::cerr << "Indice " << i << " hors intervalle. Ignoré.\n";
 		}
 	}
+}
+
+void Pioche::removePair(size_t indiceTuile, size_t indiceJetonFaune) {
+	for (size_t i = indiceJetonFaune; i < 1; i--) { //on remets des index 1 à celui du jeton pris à leur place où ils 'tombent'
+		pioche[i].second = pioche[i - 1].second;//!!!!!!!!!!!!!!!!!!!!est ce qu'on aurait besoin d'un constructeur par recopie de tuile et jeton?
+	}
+	for (size_t i = indiceTuile; i < 1; i--) { //same for tuile
+		pioche[i].first = pioche[i - 1].first;
+	}
+	pioche[0]= std::make_pair(nouvelleTuile(), nouveauJetonFaune());//on génère le nouveau jeton et tuile en tete de la pioche
+}
+//^when you choose une pair (tuile et jetonFaune) en utilisant un jetonNature: they fall down and you get new pairs
+
+
+
+
+
+
+//to be continued:
+void Pioche::removeLastPair() { //!!!!!!!!!!!!!!!!!!!!!!!!!à en parler. simulates fake player //i think this function should be done after choosing the architecture of how the game works
+	//if (pioche[3]) {//si la dernière est valide == le joueur n'a pas choisi cette paire
+	//	//enlever la dernière paire (indice 3)
+	//	pioche[3] = pioche[2];
+	//	pioche[2] = pioche[1];
+	//	pioche[1] = pioche[0];
+	//	pioche[0] = std::make_pair(nouvelleTuile(), nouveauJetonFaune());
+	//}
+	//else {
+	//	//enlever la paire à l'indice 2 (dernière paire valide)
+
+	//}
 }

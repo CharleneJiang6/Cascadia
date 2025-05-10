@@ -46,7 +46,7 @@ public:
 
 std::ostream& operator<<(std::ostream& flux, const Position& p); //afficher une Position
 
-string directionToString(Direction dir);
+std::string directionToString(Direction dir);
 
 std::ostream& operator<<(std::ostream& flux, const Direction& d); //afficher une Position
 
@@ -94,7 +94,7 @@ public :
 
 class Pioche {
 private:
-	std::array<pair<Tuile, JetonFaune>, 4> pioche;
+	std::array<std::pair<Tuile, JetonFaune>, 4> pioche;
 	// Privation du constructeur
 public:
 	// Suppression du constructeur par copie et par affectation 
@@ -111,7 +111,7 @@ public:
 	}
 
 	// getterPair à indice specifique
-	inline pair<Tuile, JetonFaune> getPair(size_t indice) const {
+	inline std::pair<Tuile, JetonFaune> getPair(size_t indice) const {
 		if (indice < 4) {
 			return pioche[indice];
 		}
@@ -135,12 +135,13 @@ public:
 	
 	void resetAllJetonFaune();
 	void resetJetonFaune(const std::vector<int>& quiEnleverIndices);
-
+	void removePair(size_t indiceTuile, size_t indiceJetonFaune);
+	void removeLastPair();
 
 };
 
 class EnvJoueur {
-	string pseudo;
+	std::string pseudo;
 	//unordered_map<Position, Tuile, PositionHash> ?
 	size_t nbJetonNature;
 	size_t scoreFinal;
@@ -154,8 +155,8 @@ public:
 class Partie {
 	size_t nbJoeurs;
 	size_t compteurTours;
-	stack<Tuile> tuilesRestantes;
-	stack<JetonFaune> jetonsRestants;
+	std::stack<Tuile> tuilesRestantes;
+	std::stack<JetonFaune> jetonsRestants;
 	EnvJoueur* currentJoeur;
 
 
