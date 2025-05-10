@@ -290,7 +290,6 @@ void GestionInstanciation::instancierTripletsDepart(const string& fileName, vect
 	for (const auto& triplet : root["tuiles_depart"]) {
 		for (const auto& tuile : triplet["triplet"]) {
 			size_t j = 0;// j parcours de 0 a 2 pour l'indice respective des tuiles dans un triplet
-			vector<Tuile> tripletTuiles;
 			for (const auto& donnee : tuile["tuile"]){
 				array<Habitat, 6> habitats;
 				size_t i = 0; // i parcours de 0 a 5 pour les 6 types d'habitats
@@ -304,10 +303,9 @@ void GestionInstanciation::instancierTripletsDepart(const string& fileName, vect
 					faunes.push_back(stringToFaune(faune.asString()));
 				}
 				bool donneJetonNature = donnee["donneJetonNature"].asBool();
-				tripletTuiles[j] = Tuile(habitats, faunes, donneJetonNature);
+				ensembleTripletsDepart[j].push_back(Tuile(habitats, faunes, donneJetonNature));
 				j++;
 			}
-			ensembleTripletsDepart.push_back(tripletTuiles);
 		}
 	}
 }
