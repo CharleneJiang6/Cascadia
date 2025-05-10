@@ -1,14 +1,15 @@
 #include <iostream>
 #include "cascadia.h"
-using namespace std;
 
-ostream& operator<<(ostream& flux, const Position& p)
+//POSITION
+
+std::ostream& operator<<(std::ostream& flux, const Position& p)
 {
 	flux << "(" << p.getQ() << "," << p.getR() << "," << p.getS() << ")";
 	return flux;
 }
 
-string habitatToString(Habitat habitat) {
+std::string habitatToString(Habitat habitat) {
 	switch (habitat) {
 	case Habitat::marais:       return "marais";
 	case Habitat::fleuve:		return "fleuve";
@@ -19,7 +20,7 @@ string habitatToString(Habitat habitat) {
 	}
 }
 
-string fauneToString(Faune faune) {
+std::string fauneToString(Faune faune) {
 	switch (faune) {
 	case Faune::saumon:			return "saumon";
 	case Faune::ours:			return "ours";
@@ -31,7 +32,7 @@ string fauneToString(Faune faune) {
 	}
 }
 
-string directionToString(Direction dir) {
+std::string directionToString(Direction dir) {
 	switch (dir) {
 	case Direction::Est:       return "Est";
 	case Direction::NordEst:   return "NordEst";
@@ -43,17 +44,17 @@ string directionToString(Direction dir) {
 	}
 }
 
-ostream& operator<<(ostream& flux, Habitat h) {
+std::ostream& operator<<(std::ostream& flux, Habitat h) {
 	flux << habitatToString(h);
 	return flux;
 }
 
-ostream& operator<<(ostream& flux, Faune f) {
+std::ostream& operator<<(std::ostream& flux, Faune f) {
 	flux << fauneToString(f);
 	return flux;
 }
 
-ostream& operator<<(ostream& flux, Direction d) {
+std::ostream& operator<<(std::ostream& flux, Direction d) {
 
 	flux << directionToString(d);
 	return flux;
@@ -77,7 +78,8 @@ Direction coteTangent(const Position& a, const Position& b)
 	return Direction::Inconnue; 
 }
 
-vector<Position> Position::getVecteurPositionsAdjacentes() const {
+
+std::vector<Position> Position::getVecteurPositionsAdjacentes() const {
 	return {
 		Position(q + 1, r, s - 1),    // Nord-Est, côté 0
 		Position(q + 1, r - 1, s),    // Est, côté 1
@@ -169,7 +171,7 @@ void testClassePosition(){
 	cout << (direction_vecteur[static_cast<int>(coteTangent(p, q))]);
 }
 
-ostream& operator<<(ostream& flux, const Tuile& tuile) {
+std::ostream& operator<<(std::ostream& flux, const Tuile& tuile) {
 	const auto& habitats = tuile.getHabitats();
 	const auto& faunes = tuile.getFaunes();
 
@@ -216,9 +218,9 @@ void Tuile::pivoterAntiHoraire() {
 
 
 void testClasseTuile() {
-	array<Habitat, 6> hab = {Habitat::fleuve, Habitat::fleuve, Habitat::fleuve, 
+	std::array<Habitat, 6> hab = {Habitat::fleuve, Habitat::fleuve, Habitat::fleuve,
 							Habitat::foret, Habitat::foret, Habitat::foret} ;
-	vector<Faune> fau = { Faune::buse,Faune::renard,Faune::ours };
+	std::vector<Faune> fau = { Faune::buse,Faune::renard,Faune::ours };
 	
 	Tuile t = Tuile(hab, fau);
 
