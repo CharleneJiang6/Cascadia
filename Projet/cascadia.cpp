@@ -41,6 +41,15 @@ Faune stringToFaune(const string& s) {
 	throw std::invalid_argument("Faune inconnu : " + s);
 }
 
+Habitat stringToHabitat(const string& s) {
+	if (s == "marais")		return Habitat::marais;
+	if (s == "fleuve")		return Habitat::fleuve;
+	if (s == "montagne")	return Habitat::montagne;
+	if (s == "prairie")		return Habitat::prairie;
+	if (s == "forêt")		return Habitat::foret;
+	throw std::invalid_argument("Habitat inconnu: " + s);
+}
+
 string directionToString(Direction dir) {
 	switch (dir) {
 	case Direction::Est:       return "Est";
@@ -51,6 +60,10 @@ string directionToString(Direction dir) {
 	case Direction::SudEst:    return "SudEst";
 	default:                   return "Inconnu";
 	}
+}
+
+bool stringToBool(const string& str) {
+	return str == "true";
 }
 
 ostream& operator<<(ostream& flux, Habitat h) {
@@ -343,16 +356,6 @@ void GestionInstanciation::instancierTripletsDepart(const string& fileName, vect
 		}
 		j++;
 	}
-}
-
-
-Habitat GestionInstanciation::stringToHabitat(const string & s){
-	if (s == "marais") return Habitat::marais;
-	if (s == "fleuve") return Habitat::fleuve;
-	if (s == "montagne") return Habitat::montagne;
-	if (s == "prairie") return Habitat::prairie;
-	if (s == "forêt") return Habitat::foret;
-	throw invalid_argument("Habitat inconnu: " + s);
 }
 
 void GestionInstanciation::melangerTuiles(vector<Tuile>& tuiles) {

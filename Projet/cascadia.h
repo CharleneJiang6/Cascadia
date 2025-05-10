@@ -1,5 +1,5 @@
 ///Veuillez vous assurer que la version de votre IDE est au moins C++17 avant de compiler.
-///Veuillez vous assurer avoir inclus correctement le fichier <json\json.h> avant de compiler.
+///Veuillez vous assurer avoir telecharger le dossier "include", afin de permettre le chargement du fichier "json.h".
 #pragma once
 #include <iostream>
 #include <vector>
@@ -9,7 +9,7 @@
 #include <optional>
 #include <unordered_map>
 #include <fstream>
-#include <json\json.h>
+#include "include\json\json.h"
 #include <random>
 using namespace std;
 
@@ -19,8 +19,10 @@ enum class Direction { NordEst = 0, Est = 1, SudEst = 2, SudOuest = 3, Ouest = 4
 
 string habitatToString(Habitat habitat);
 string fauneToString(Faune faune);
-Faune stringToFaune(const string& s);
 string directionToString(Direction dir);
+Faune stringToFaune(const string& s);
+Habitat stringToHabitat(const string& s);
+bool stringToBool(const string& str);
 
 ostream& operator<<(ostream& flux, Habitat h);
 ostream& operator<<(ostream& flux, Faune f);
@@ -202,9 +204,5 @@ public:
 	void instancierTuiles(const string& fileName, vector<Tuile>& ensembleTuiles);
 	void instancierTripletsDepart(const string& fileName, vector<vector<Tuile>>& ensembleTripletsDepart);
 	void melangerTuiles(vector<Tuile>& tuiles);
-	bool stringToBool(const string& str) {
-		return str == "true";
-	}
-	Habitat stringToHabitat(const string& s);
 	Tuile depilerTuile(vector<Tuile>& tuiles);
 };
