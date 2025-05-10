@@ -139,9 +139,21 @@ void Pioche::retirerPaire(size_t indice) {
 	}
 }
 
-void Pioche::resetJetonFaune(){
+void Pioche::resetAllJetonFaune(){
 	for (int i = 0; i < 4; i++) {
 		pioche[i].second = nouveauJetonFaune();
 		// sans faire faune type -- (t'as dis quoi nicolas?)
+	}
+}
+
+void Pioche::resetJetonFaune(const std::vector<int>& quiEnleverIndices) {
+	for (int i : quiEnleverIndices) {
+		if (i >= 0 && i < 4) {
+			pioche[i].second = nouveauJetonFaune();
+		} else {
+			//throw std::out_of_range("Indice hors intervalle de la taille de la pioche, ignoré");
+			//^si on veut que le programme s'arrête là, sinon:
+			std::cerr << "Indice " << i << " hors intervalle. Ignoré.\n";
+		}
 	}
 }

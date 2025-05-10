@@ -6,7 +6,6 @@
 #include <optional>
 #include <utility>
 #include <optional>
-using namespace std;
 
 enum class Habitat { marais, fleuve, montagne, prairie, foret };
 enum class Faune { saumon, ours, buse, renard, wapiti };
@@ -29,7 +28,7 @@ public:
 	int getR() const { return r; }
 	int getS() const { return s; }
 
-	vector<Position> getVecteurPositionsAdjacentes() const;
+	std::vector<Position> getVecteurPositionsAdjacentes() const;
 
 	bool estAdjacente(const Position& position) const;
 
@@ -45,14 +44,14 @@ public:
 
 };
 
-ostream& operator<<(ostream& flux, const Position& p); //afficher une Position
+std::ostream& operator<<(std::ostream& flux, const Position& p); //afficher une Position
 
 string directionToString(Direction dir);
 
-ostream& operator<<(ostream& flux, const Direction& d); //afficher une Position
+std::ostream& operator<<(std::ostream& flux, const Direction& d); //afficher une Position
 
 
-extern const vector <Position> direction_vecteur;
+extern const std::vector<Position> direction_vecteur;
 
 const Direction getDirectionOpposee(Direction dir);
 
@@ -61,8 +60,8 @@ Direction coteTangent(const Position& a, const Position b);
 
 
 class Tuile {
-	array<Habitat, 2> paysages;
-	array<Faune,3> faunes;
+	std::array<Habitat, 2> paysages;
+	std::array<Faune,3> faunes;
 	bool jetonPlace;
 
 public:
@@ -95,7 +94,7 @@ public :
 
 class Pioche {
 private:
-	array<pair<Tuile, JetonFaune>, 4> pioche;
+	std::array<pair<Tuile, JetonFaune>, 4> pioche;
 	// Privation du constructeur
 public:
 	// Suppression du constructeur par copie et par affectation 
@@ -106,9 +105,9 @@ public:
 	// setterPair à indice specifique
 	inline void setPair(size_t indice, const Tuile& tuile, const JetonFaune& jeton){
 		if (indice < 4) {
-			pioche[indice] = make_pair(tuile, jeton);
+			pioche[indice] = std::make_pair(tuile, jeton);
 		}
-		throw out_of_range("Indice hors intervalle de la taille de la pioche");
+		throw std::out_of_range("Indice hors intervalle de la taille de la pioche");
 	}
 
 	// getterPair à indice specifique
@@ -116,7 +115,7 @@ public:
 		if (indice < 4) {
 			return pioche[indice];
 		}
-		throw out_of_range("Indice hors intervalle de la taille de la pioche");
+		throw std::out_of_range("Indice hors intervalle de la taille de la pioche");
 	}
 
 	// verification si pioche contient au moins un type de JetonFaune de cardinalité == nombre fois
@@ -134,7 +133,8 @@ public:
 	Tuile& nouvelleTuile();
 	JetonFaune& nouveauJetonFaune();
 	
-	void resetJetonFaune();
+	void resetAllJetonFaune();
+	void resetJetonFaune(const std::vector<int>& quiEnleverIndices);
 
 
 };
