@@ -141,8 +141,7 @@ void Pioche::retirerPaire(size_t indice) {
 
 void Pioche::resetJetonFaune(){
 	for (int i = 0; i < 4; i++) {
-		std::pair<Tuile, JetonFaune> pair = getPair(i);
-		pair = make_pair(pair.first, nouveauJetonFaune());
-		// sans faire faune type --
+		pioche[i].second = nouveauJetonFaune();
+		// sans faire faune type -- (t'as dis quoi nicolas?)
 	}
 }
