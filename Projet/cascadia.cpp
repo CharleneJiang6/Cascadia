@@ -2,13 +2,13 @@
 #include "cascadia.h"
 
 
-ostream& operator<<(ostream& flux, const Position& p)
+std::ostream& operator<<(std::ostream& flux, const Position& p)
 {
 	flux << "(" << p.getQ() << "," << p.getR() << "," << p.getS() << ")";
 	return flux;
 }
 
-string directionToString(Direction dir) {
+std::string directionToString(Direction dir) {
 	switch (dir) {
 	case Direction::Est:       return "Est";
 	case Direction::NordEst:   return "NordEst";
@@ -20,7 +20,7 @@ string directionToString(Direction dir) {
 	}
 }
 
-ostream& operator<<(ostream& flux, const Direction& d)
+std::ostream& operator<<(std::ostream& flux, const Direction& d)
 {
 	flux << directionToString(d);
 	return flux;
@@ -31,7 +31,7 @@ const Direction getDirectionOpposee(Direction dir) {
 }
 
 //par exemple, sur le coté NordOuest de a se trouve b, alors la fonction retourne NordOuest
-Direction coteTangent(const Position& a, const Position b)
+Direction coteTangent(const Position& a, const Position& b)
 {
 	if (a.estAdjacente(b)) {
 		for (int i = 0; i < 6; ++i) {
@@ -44,7 +44,7 @@ Direction coteTangent(const Position& a, const Position b)
 	return Direction::Inconnue; 
 }
 
-vector<Position> Position::getVecteurPositionsAdjacentes() const {
+std::vector<Position> Position::getVecteurPositionsAdjacentes() const {
 	return {
 		Position(q + 1, r, s - 1),    // Nord-Est, côté 0
 		Position(q + 1, r - 1, s),    // Est, côté 1
@@ -84,7 +84,7 @@ const Position Position::getPositionAdjacente(Direction direction) const
 	return Position(q + pos.getQ(), r + pos.getR(), s + pos.getS());
 }
 
-const std::vector<Position> direction_vecteur = {
+static const std::vector<Position> direction_vecteur = {
 	Position(1, -1, 0), //NordEst, 0
 	Position(1, 0, -1), //Est, 1
 	Position(0, 1, -1), //SudEst, 2
@@ -97,7 +97,7 @@ const std::vector<Position> direction_vecteur = {
 // verification si pioche contient au moins un type de JetonFaune de cardinalité == count fois
 	// fauneCount les faunes indice dans l'ordre de Enum Class
 bool Pioche::contientJetonIdentique(int nombre) const {
-	array<int, 5> fauneCount{0};
+	std::array<int, 5> fauneCount{0};
 	// compter respectivement le nb de chaque faune presente
 	for (const auto& pair : pioche) {
 		fauneCount[retourneIndiceFaune(pair.second.getType())]++;
@@ -132,14 +132,16 @@ bool Pioche::estQuatreIdentique() const {
 
 void Pioche::retirerPaire(size_t indice) {
 	if (indice < 4) {
-		pioche[indice] = make_pair(nouvelleTuile(),nouveauJetonFaune());
+		pioche[indice] = std::make_pair(nouvelleTuile(),nouveauJetonFaune());
 	}
-	throw out_of_range("Indice hors intervalle de la taille de la pioche");
+	else {
+		throw std::out_of_range("Indice hors intervalle de la taille de la pioche");
+	}
 }
 
 void Pioche::resetJetonFaune(){
 	for (int i = 0; i < 4; i++) {
-		pair<Tuile, JetonFaune> pair = getPair(i);
+		std::pair<Tuile, JetonFaune> pair = getPair(i);
 		pair = make_pair(pair.first, nouveauJetonFaune());
 		// sans faire faune type --
 	}
