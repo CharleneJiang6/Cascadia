@@ -287,28 +287,64 @@ void GestionInstanciation::instancierTripletsDepart(const string& fileName, vect
 	Json::Value root;
 	file >> root;
 
-	for (const auto& triplet : root["tuiles_depart"]) {
-		for (const auto& tuile : triplet["triplet"]) {
-			size_t j = 0;// j parcours de 0 a 2 pour l'indice respective des tuiles dans un triplet
-			for (const auto& donnee : tuile["tuile"]){
-				array<Habitat, 6> habitats;
-				size_t i = 0; // i parcours de 0 a 5 pour les 6 types d'habitats
-				for (const auto& habitat : donnee["habitats"]) {
-					habitats[i] = stringToHabitat(habitat.asString());
-					i++;
-				}
+	// Check if the root has the expected structure
+	if (!root.isMember("tuiles_depart") || !root["tuiles_depart"].isArray()) {
+		throw runtime_error("Format JSON incorrect : 'tuiles_depart' manquant ou non un tableau.");
+	}
 
-				vector<Faune> faunes;
+	size_t j = 0;
+	for (const auto& triplet : root["tuiles_depart"]) {
+		if (!triplet.isMember("triplet") || !triplet["triplet"].isArray()) {
+			throw runtime_error("Format JSON incorrect : 'triplet' manquant ou non un tableau.");
+		}
+
+		for (const auto& tuile : triplet["triplet"]) {
+			if (!tuile.isMember("tuile") || !tuile["tuile"].isObject()) {
+				throw runtime_error("Format JSON incorrect : 'tuile' manquant ou non un objet.");
+			}
+
+			const auto& donnee = tuile["tuile"];
+
+			array<Habitat, 6> habitats;
+			size_t i = 0;
+			if (donnee.isMember("habitats") && donnee["habitats"].isArray()) {
+				for (const auto& habitat : donnee["habitats"]) {
+					if (i < habitats.size()) {
+						habitats[i] = stringToHabitat(habitat.asString());
+						i++;
+					}
+					else {
+						throw runtime_error("Trop d'habitats dans 'tuile'.");
+					}
+				}
+			}
+			else {
+				throw runtime_error("Format JSON incorrect : 'habitats' manquant ou non un tableau.");
+			}
+
+			vector<Faune> faunes;
+			if (donnee.isMember("faunes") && donnee["faunes"].isArray()) {
 				for (const auto& faune : donnee["faunes"]) {
 					faunes.push_back(stringToFaune(faune.asString()));
 				}
-				bool donneJetonNature = donnee["donneJetonNature"].asBool();
-				ensembleTripletsDepart[j].push_back(Tuile(habitats, faunes, donneJetonNature));
-				j++;
 			}
+			else {
+				throw runtime_error("Format JSON incorrect : 'faunes' manquant ou non un tableau.");
+			}
+
+			bool donneJetonNature = donnee.get("donneJetonNature", false).asBool();
+
+			// allocation de memoire dynamique
+			if (j >= ensembleTripletsDepart.size()) {
+				ensembleTripletsDepart.resize(j + 1);
+			}
+
+			ensembleTripletsDepart[j].push_back(Tuile(habitats, faunes, donneJetonNature));
 		}
+		j++;
 	}
 }
+
 
 Habitat GestionInstanciation::stringToHabitat(const string & s){
 	if (s == "marais") return Habitat::marais;

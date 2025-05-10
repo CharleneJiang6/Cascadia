@@ -1,4 +1,5 @@
 ///Veuillez vous assurer que la version de votre IDE est au moins C++17 avant de compiler.
+///Veuillez vous assurer avoir inclus correctement le fichier <json\json.h> avant de compiler.
 #pragma once
 #include <iostream>
 #include <vector>
