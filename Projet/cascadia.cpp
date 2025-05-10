@@ -32,13 +32,13 @@ string fauneToString(Faune faune) {
 }
 
 Faune stringToFaune(const string& s) {
-	if (s == "saumon")      return Faune::saumon;
-	else if (s == "ours")   return Faune::ours;
-	else if (s == "buse")   return Faune::buse;
-	else if (s == "renard") return Faune::renard;
-	else if (s == "wapiti") return Faune::wapiti;
-	else if (s == "rien")	return Faune::rien;
-	else throw std::invalid_argument("Faune inconnu : " + s);
+	if (s == "saumon") return Faune::saumon;
+	if (s == "ours")   return Faune::ours;
+	if (s == "buse")   return Faune::buse;
+	if (s == "renard") return Faune::renard;
+	if (s == "wapiti") return Faune::wapiti;
+	if (s == "rien")	return Faune::rien;
+	throw std::invalid_argument("Faune inconnu : " + s);
 }
 
 string directionToString(Direction dir) {
