@@ -265,7 +265,8 @@ ostream& operator<<(ostream& os, const JetonFaune& j) {
 	return os;
 }
 
-void GestionInstanciation::instancierTuiles(const string& fileName, vector<Tuile>& ensembleTuiles) {
+
+void GestionTuiles::instancierTuiles(const string& fileName, vector<Tuile>& ensembleTuiles) {
 	ifstream file(fileName);
 	if (!file.is_open()) {
 		throw runtime_error("Impossible d'ouvrir le fichier JSON.");
@@ -291,7 +292,7 @@ void GestionInstanciation::instancierTuiles(const string& fileName, vector<Tuile
 	}
 }
 
-void GestionInstanciation::instancierTripletsDepart(const string& fileName, vector<vector<Tuile>>& ensembleTripletsDepart) {
+void GestionTuiles::instancierTuilesDepart(const string& fileName, vector<vector<Tuile>>& ensembleTuilesDepart) {
 	ifstream file(fileName);
 	if (!file.is_open()) {
 		throw runtime_error("Impossible d'ouvrir le fichier JSON.");
@@ -348,23 +349,23 @@ void GestionInstanciation::instancierTripletsDepart(const string& fileName, vect
 			bool donneJetonNature = donnee.get("donneJetonNature", false).asBool();
 
 			// allocation de memoire dynamique
-			if (j >= ensembleTripletsDepart.size()) {
-				ensembleTripletsDepart.resize(j + 1);
+			if (j >= ensembleTuilesDepart.size()) {
+				ensembleTuilesDepart.resize(j + 1);
 			}
 
-			ensembleTripletsDepart[j].push_back(Tuile(habitats, faunes, donneJetonNature));
+			ensembleTuilesDepart[j].push_back(Tuile(habitats, faunes, donneJetonNature));
 		}
 		j++;
 	}
 }
 
-void GestionInstanciation::melangerTuiles(vector<Tuile>& tuiles) {
+void GestionTuiles::melangerTuiles(vector<Tuile>& tuiles) {
 	random_device rd;
 	mt19937 g(rd());
 	shuffle(tuiles.begin(), tuiles.end(), g);
 }
 
-Tuile GestionInstanciation::depilerTuile(vector<Tuile>& tuiles) {
+Tuile GestionTuiles::depilerTuile(vector<Tuile>& tuiles) {
 	if (tuiles.empty()) {
 		throw runtime_error("La pile est vide.");
 	}
@@ -372,4 +373,52 @@ Tuile GestionInstanciation::depilerTuile(vector<Tuile>& tuiles) {
 	Tuile tuile = move(tuiles.back()); // Move the tuile
 	tuiles.pop_back(); // Remove the tuile from the vector
 	return tuile; // Return the moved tuile
+}
+
+
+void testGestionTuiles() {
+	try {
+		/*vector<Tuile> ensembleTuiles;
+		GestionTuiles::instancierTuiles("tuiles_non_reperes.json", ensembleTuiles);
+		GestionTuiles::instancierTuiles("tuiles_reperes.json", ensembleTuiles);*/
+		vector<vector<Tuile>> ensembleTuilesDepart;
+		GestionTuiles::instancierTuilesDepart("tuiles_depart.json", ensembleTuilesDepart);
+
+		for (size_t i = 0; i < ensembleTuilesDepart.size(); ++i) {
+			cout << "Triplet " << i + 1 << ":\n";
+			for (const auto& tuile : ensembleTuilesDepart[i]) {
+				cout << tuile << endl;  // Now this works
+			}
+			cout << "----------------------\n";
+		}
+
+		//// Toutes les tuiles (Avant)
+		//cout << "Ensemble de Tuiles avant de melanger et depiler:" << endl;
+		//for (const auto& tuile : ensembleTuiles) {
+		//    cout << tuile << endl;
+		//}
+
+		//// Toutes les tuiles melangees (Avant)
+		//GestionTuiles::melangerTuiles(ensembleTuiles);
+		//cout << "Ensemble de Tuiles apres avoir ete melange sans depiler:" << endl;
+		//for (const auto& tuile : ensembleTuiles) {
+		//    cout << tuile << endl;
+		//}
+
+		////depiler la derniere Tuile
+		//Tuile tuileDepilee = GestionTuiles::depilerTuile(ensembleTuiles);
+		//cout << "Tuile depilee: " << tuileDepilee << endl;
+
+		//// le reste des tuiles (Apres)
+		//cout << "Ensemble de Tuiles apres avoir ete melange et depile:" << endl;
+		//for (const auto& tuile : ensembleTuiles) {
+		//    cout << tuile << endl;
+		//}
+	}
+	catch (const runtime_error& e) {
+		cerr << "Error: " << e.what() << endl;
+	}
+	catch (const exception& e) {
+		cerr << "Unexpected error: " << e.what() << endl;
+	}
 }

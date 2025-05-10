@@ -199,10 +199,12 @@ public:
 	//methods
 };
 
-class GestionInstanciation {
-public:
-	void instancierTuiles(const string& fileName, vector<Tuile>& ensembleTuiles);
-	void instancierTripletsDepart(const string& fileName, vector<vector<Tuile>>& ensembleTripletsDepart);
-	void melangerTuiles(vector<Tuile>& tuiles);
-	Tuile depilerTuile(vector<Tuile>& tuiles);
-};
+//groupement de fonctions utiles pour la manipulation des fichiers JSON
+namespace GestionTuiles {
+	void instancierTuiles(const std::string& fichier, std::vector<Tuile>& ensembleTuiles);
+	void instancierTuilesDepart(const std::string& fichier, std::vector<std::vector<Tuile>>& ensembleTripletsDepart);
+	void melangerTuiles(std::vector<Tuile>& tuiles);
+	Tuile depilerTuile(std::vector<Tuile>& tuiles);
+}
+
+void testGestionTuiles();
