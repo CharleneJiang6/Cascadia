@@ -209,8 +209,8 @@ public:
 namespace GestionTuiles {
 	vector<Tuile> instancierTuiles(const std::string& fichier = "tuiles_non_reperes.json");
 	//void instancierTuilesDepart(const std::string& fichier, std::vector<std::vector<Tuile>>& ensembleTripletsDepart);
-	//void melangerTuiles(std::vector<Tuile>& tuiles);
-	//Tuile depilerTuile(std::vector<Tuile>& tuiles);
+	void melangerTuiles(std::vector<Tuile>& tuiles);
+	Tuile depilerTuile(std::vector<Tuile>& tuiles);
 }
 
 void testGestionTuiles();

@@ -305,6 +305,9 @@ vector<Tuile> GestionTuiles::instancierTuiles(const string& fichier) {
 	return tuiles;
 }
 
+
+///TODO : revoir ça pour être conforme à nlohmann::json
+
 //void GestionTuiles::instancierTuilesDepart(const string& fichier, vector<vector<Tuile>>& ensembleTuilesDepart) {
 //	ifstream file(fichier);
 //	if (!file.is_open()) {
@@ -371,22 +374,23 @@ vector<Tuile> GestionTuiles::instancierTuiles(const string& fichier) {
 //		j++;
 //	}
 //}
-//
-//void GestionTuiles::melangerTuiles(vector<Tuile>& tuiles) {
-//	random_device rd;
-//	mt19937 g(rd());
-//	shuffle(tuiles.begin(), tuiles.end(), g);
-//}
-//
-//Tuile GestionTuiles::depilerTuile(vector<Tuile>& tuiles) {
-//	if (tuiles.empty()) {
-//		throw runtime_error("La pile est vide.");
-//	}
-//
-//	Tuile tuile = move(tuiles.back()); // Move the tuile
-//	tuiles.pop_back(); // Remove the tuile from the vector
-//	return tuile; // Return the moved tuile
-//}
+
+void GestionTuiles::melangerTuiles(std::vector<Tuile>& tuiles) {
+	std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(tuiles.begin(), tuiles.end(), g);
+}
+
+///TODO: reflechir à implmenter en stack au lieu de vector
+Tuile GestionTuiles::depilerTuile(std::vector<Tuile>& tuiles) {
+	if (tuiles.empty()) {
+		throw std::out_of_range("Impossible de dépiler : vecteur vide !");
+	}
+
+	Tuile tuile = move(tuiles.back());
+	tuiles.pop_back();
+	return tuile; 
+}
 
 
 void testGestionTuiles() {
@@ -439,9 +443,14 @@ void testGestionTuiles() {
 
 void testGestionTuiles2() {
 	std::vector<Tuile> tuilesNonReperes = GestionTuiles::instancierTuiles("tuiles_non_reperes.json");
+	//for (const auto& tuile : tuilesNonReperes) cout << tuile << endl;
 
-	for (const auto& tuile : tuilesNonReperes)
-		cout << tuile << endl;
+	std::vector<Tuile> tuilesReperes = GestionTuiles::instancierTuiles("tuiles_reperes.json");
+	//for (const auto& tuile : tuilesReperes) cout << tuile << endl;
+	
+	///TODO : peut etre qu'il faut fusionner les reperes et nonReperes
 
+	GestionTuiles::melangerTuiles(tuilesNonReperes);
+	cout << GestionTuiles::depilerTuile(tuilesNonReperes);
 
 }
