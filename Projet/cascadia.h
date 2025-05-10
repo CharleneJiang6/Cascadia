@@ -1,4 +1,5 @@
 ///Veuillez vous assurer que la version de votre IDE est au moins C++17 avant de compiler.
+///Veuillez vous assurer avoir inclus correctement le fichier <json\json.h> avant de compiler.
 #pragma once
 #include <iostream>
 #include <vector>
@@ -7,7 +8,9 @@
 #include <algorithm>
 #include <optional>
 #include <unordered_map>
-
+#include <fstream>
+#include <json\json.h>
+#include <random>
 using namespace std;
 
 enum class Habitat { marais, fleuve, montagne, prairie, foret };
@@ -192,4 +195,16 @@ public:
 	//getters
 	//setters
 	//methods
+};
+
+class GestionInstanciation {
+public:
+	void instancierTuiles(const string& fileName, vector<Tuile>& ensembleTuiles);
+	void instancierTripletsDepart(const string& fileName, vector<vector<Tuile>>& ensembleTripletsDepart);
+	void melangerTuiles(vector<Tuile>& tuiles);
+	bool stringToBool(const string& str) {
+		return str == "true";
+	}
+	Habitat stringToHabitat(const string& s);
+	Tuile depilerTuile(vector<Tuile>& tuiles);
 };
