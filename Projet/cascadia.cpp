@@ -266,114 +266,127 @@ ostream& operator<<(ostream& os, const JetonFaune& j) {
 }
 
 
-void GestionTuiles::instancierTuiles(const string& fileName, vector<Tuile>& ensembleTuiles) {
-	ifstream file(fileName);
-	if (!file.is_open()) {
-		throw runtime_error("Impossible d'ouvrir le fichier JSON.");
-	}
+vector<Tuile> GestionTuiles::instancierTuiles(const string& fichier) {
+	std::ifstream f(fichier);
+	if (!f) throw std::runtime_error("Impossible d'ouvrir le fichier JSON : " + fichier);
 
-	Json::Value root;
-	file >> root;
+	vector <Tuile> tuiles;
 
-	for (const auto& donnee : root["tuiles"]) {
+	json data = json::parse(f);
+
+	for (const auto& tuile : data["tuiles"]) {
+
+		// Conversion des habitats
 		array<Habitat, 6> habitats;
 		size_t i = 0;
-		for (auto habitat : donnee["habitats"]) {
-			habitats[i] = stringToHabitat(habitat.asString());
+		for (auto habitat : tuile["habitats"]) {
+			habitats[i] = stringToHabitat(habitat.get<std::string>()); 
 			i++;
 		}
+
+		if (i != 6 || i > habitats.size())
+			throw std::runtime_error("Une tuile doit possède exactement 6 habitats !");
+
+		// Conversion des faunes
 		vector<Faune> faunes;
-		for (const auto& faune : donnee["faunes"]) {
-			faunes.push_back(stringToFaune(faune.asString()));
+		for (auto faune : tuile["faunes"]) {
+			faunes.push_back(stringToFaune(faune.get<std::string>()));
 		}
 
-		bool donneJetonNature = stringToBool(donnee["donneJetonNature"].asString());
-		ensembleTuiles.emplace_back(habitats, faunes, donneJetonNature);
+		if (faunes.size() < 1 || faunes.size() > Tuile::maxFaunes)
+		throw std::runtime_error("Le nombre de faunes qu'une tuile habrite va 1 a " + std::to_string(Tuile::maxFaunes));
+
+		bool donneJetonNature = tuile.value("donneJetonNature", false); //false, valeur par défaut
+		
+		// Construction d'une Tuile directement dans le conteneur tuiles
+		tuiles.emplace_back(habitats, faunes, donneJetonNature);
 	}
+
+	return tuiles;
 }
 
-void GestionTuiles::instancierTuilesDepart(const string& fileName, vector<vector<Tuile>>& ensembleTuilesDepart) {
-	ifstream file(fileName);
-	if (!file.is_open()) {
-		throw runtime_error("Impossible d'ouvrir le fichier JSON.");
-	}
-
-	Json::Value root;
-	file >> root;
-
-	// Check if the root has the expected structure
-	if (!root.isMember("tuiles_depart") || !root["tuiles_depart"].isArray()) {
-		throw runtime_error("Format JSON incorrect : 'tuiles_depart' manquant ou non un tableau.");
-	}
-
-	size_t j = 0;
-	for (const auto& triplet : root["tuiles_depart"]) {
-		if (!triplet.isMember("triplet") || !triplet["triplet"].isArray()) {
-			throw runtime_error("Format JSON incorrect : 'triplet' manquant ou non un tableau.");
-		}
-
-		for (const auto& tuile : triplet["triplet"]) {
-			if (!tuile.isMember("tuile") || !tuile["tuile"].isObject()) {
-				throw runtime_error("Format JSON incorrect : 'tuile' manquant ou non un objet.");
-			}
-
-			const auto& donnee = tuile["tuile"];
-
-			array<Habitat, 6> habitats;
-			size_t i = 0;
-			if (donnee.isMember("habitats") && donnee["habitats"].isArray()) {
-				for (const auto& habitat : donnee["habitats"]) {
-					if (i < habitats.size()) {
-						habitats[i] = stringToHabitat(habitat.asString());
-						i++;
-					}
-					else {
-						throw runtime_error("Trop d'habitats dans 'tuile'.");
-					}
-				}
-			}
-			else {
-				throw runtime_error("Format JSON incorrect : 'habitats' manquant ou non un tableau.");
-			}
-
-			vector<Faune> faunes;
-			if (donnee.isMember("faunes") && donnee["faunes"].isArray()) {
-				for (const auto& faune : donnee["faunes"]) {
-					faunes.push_back(stringToFaune(faune.asString()));
-				}
-			}
-			else {
-				throw runtime_error("Format JSON incorrect : 'faunes' manquant ou non un tableau.");
-			}
-
-			bool donneJetonNature = donnee.get("donneJetonNature", false).asBool();
-
-			// allocation de memoire dynamique
-			if (j >= ensembleTuilesDepart.size()) {
-				ensembleTuilesDepart.resize(j + 1);
-			}
-
-			ensembleTuilesDepart[j].push_back(Tuile(habitats, faunes, donneJetonNature));
-		}
-		j++;
-	}
-}
-
-void GestionTuiles::melangerTuiles(vector<Tuile>& tuiles) {
-	random_device rd;
-	mt19937 g(rd());
-	shuffle(tuiles.begin(), tuiles.end(), g);
-}
-
-Tuile GestionTuiles::depilerTuile(vector<Tuile>& tuiles) {
-	if (tuiles.empty()) {
-		throw runtime_error("La pile est vide.");
-	}
-
-	Tuile tuile = move(tuiles.back()); // Move the tuile
-	tuiles.pop_back(); // Remove the tuile from the vector
-	return tuile; // Return the moved tuile
-}
+//void GestionTuiles::instancierTuilesDepart(const string& fichier, vector<vector<Tuile>>& ensembleTuilesDepart) {
+//	ifstream file(fichier);
+//	if (!file.is_open()) {
+//		throw runtime_error("Impossible d'ouvrir le fichier JSON.");
+//	}
+//
+//	Json::Value root;
+//	file >> root;
+//
+//	// Check if the root has the expected structure
+//	if (!root.isMember("tuiles_depart") || !root["tuiles_depart"].isArray()) {
+//		throw runtime_error("Format JSON incorrect : 'tuiles_depart' manquant ou non un tableau.");
+//	}
+//
+//	size_t j = 0;
+//	for (const auto& triplet : root["tuiles_depart"]) {
+//		if (!triplet.isMember("triplet") || !triplet["triplet"].isArray()) {
+//			throw runtime_error("Format JSON incorrect : 'triplet' manquant ou non un tableau.");
+//		}
+//
+//		for (const auto& tuile : triplet["triplet"]) {
+//			if (!tuile.isMember("tuile") || !tuile["tuile"].isObject()) {
+//				throw runtime_error("Format JSON incorrect : 'tuile' manquant ou non un objet.");
+//			}
+//
+//			const auto& donnee = tuile["tuile"];
+//
+//			array<Habitat, 6> habitats;
+//			size_t i = 0;
+//			if (donnee.isMember("habitats") && donnee["habitats"].isArray()) {
+//				for (const auto& habitat : donnee["habitats"]) {
+//					if (i < habitats.size()) {
+//						habitats[i] = stringToHabitat(habitat.asString());
+//						i++;
+//					}
+//					else {
+//						throw runtime_error("Trop d'habitats dans 'tuile'.");
+//					}
+//				}
+//			}
+//			else {
+//				throw runtime_error("Format JSON incorrect : 'habitats' manquant ou non un tableau.");
+//			}
+//
+//			vector<Faune> faunes;
+//			if (donnee.isMember("faunes") && donnee["faunes"].isArray()) {
+//				for (const auto& faune : donnee["faunes"]) {
+//					faunes.push_back(stringToFaune(faune.asString()));
+//				}
+//			}
+//			else {
+//				throw runtime_error("Format JSON incorrect : 'faunes' manquant ou non un tableau.");
+//			}
+//
+//			bool donneJetonNature = donnee.get("donneJetonNature", false).asBool();
+//
+//			// allocation de memoire dynamique
+//			if (j >= ensembleTuilesDepart.size()) {
+//				ensembleTuilesDepart.resize(j + 1);
+//			}
+//
+//			ensembleTuilesDepart[j].push_back(Tuile(habitats, faunes, donneJetonNature));
+//		}
+//		j++;
+//	}
+//}
+//
+//void GestionTuiles::melangerTuiles(vector<Tuile>& tuiles) {
+//	random_device rd;
+//	mt19937 g(rd());
+//	shuffle(tuiles.begin(), tuiles.end(), g);
+//}
+//
+//Tuile GestionTuiles::depilerTuile(vector<Tuile>& tuiles) {
+//	if (tuiles.empty()) {
+//		throw runtime_error("La pile est vide.");
+//	}
+//
+//	Tuile tuile = move(tuiles.back()); // Move the tuile
+//	tuiles.pop_back(); // Remove the tuile from the vector
+//	return tuile; // Return the moved tuile
+//}
 
 
 void testGestionTuiles() {
@@ -381,16 +394,17 @@ void testGestionTuiles() {
 		/*vector<Tuile> ensembleTuiles;
 		GestionTuiles::instancierTuiles("tuiles_non_reperes.json", ensembleTuiles);
 		GestionTuiles::instancierTuiles("tuiles_reperes.json", ensembleTuiles);*/
-		vector<vector<Tuile>> ensembleTuilesDepart;
-		GestionTuiles::instancierTuilesDepart("tuiles_depart.json", ensembleTuilesDepart);
+		
+		//vector<vector<Tuile>> ensembleTuilesDepart;
+		//GestionTuiles::instancierTuilesDepart("tuiles_depart.json", ensembleTuilesDepart);
 
-		for (size_t i = 0; i < ensembleTuilesDepart.size(); ++i) {
-			cout << "Triplet " << i + 1 << ":\n";
-			for (const auto& tuile : ensembleTuilesDepart[i]) {
-				cout << tuile << endl;  // Now this works
-			}
-			cout << "----------------------\n";
-		}
+		//for (size_t i = 0; i < ensembleTuilesDepart.size(); ++i) {
+		//	cout << "Triplet " << i + 1 << ":\n";
+		//	for (const auto& tuile : ensembleTuilesDepart[i]) {
+		//		cout << tuile << endl;  // Now this works
+		//	}
+		//	cout << "----------------------\n";
+		//}
 
 		//// Toutes les tuiles (Avant)
 		//cout << "Ensemble de Tuiles avant de melanger et depiler:" << endl;
@@ -421,4 +435,13 @@ void testGestionTuiles() {
 	catch (const exception& e) {
 		cerr << "Unexpected error: " << e.what() << endl;
 	}
+}
+
+void testGestionTuiles2() {
+	std::vector<Tuile> tuilesNonReperes = GestionTuiles::instancierTuiles("tuiles_non_reperes.json");
+
+	for (const auto& tuile : tuilesNonReperes)
+		cout << tuile << endl;
+
+
 }

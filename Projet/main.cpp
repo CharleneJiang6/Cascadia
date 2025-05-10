@@ -12,5 +12,8 @@ int main() {
 	//JetonFaune j(Faune::saumon);
 	//cout << j;
 
-	testGestionTuiles();
+	//testGestionTuiles();
+
+	testGestionTuiles2();
+
 }

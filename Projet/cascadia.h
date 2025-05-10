@@ -2,6 +2,7 @@
 ///Veuillez vous assurer avoir telecharger le dossier "include", afin de permettre le chargement du fichier "json.h".
 #pragma once
 #include <iostream>
+#include <string>
 #include <vector>
 #include <stack>
 #include <array>
@@ -9,9 +10,13 @@
 #include <optional>
 #include <unordered_map>
 #include <fstream>
-#include "include\json\json.h"
+//#include "include\json\json.h"
+#include "json.hpp"
 #include <random>
 using namespace std;
+using json = nlohmann::json;
+
+static size_t maxFaunes;
 
 enum class Habitat { marais, fleuve, montagne, prairie, foret };
 enum class Faune { saumon, ours, buse, renard, wapiti, rien };
@@ -82,6 +87,7 @@ class Tuile {
 	bool placementConfirme;
 
 public:
+	static const size_t maxFaunes = 3; //variable de classe partagee par toutes les instances
 
 	//constructeur principal
 	Tuile(	const array<Habitat,6>& habitats, 
@@ -201,10 +207,12 @@ public:
 
 //groupement de fonctions utiles pour la manipulation des fichiers JSON
 namespace GestionTuiles {
-	void instancierTuiles(const std::string& fichier, std::vector<Tuile>& ensembleTuiles);
-	void instancierTuilesDepart(const std::string& fichier, std::vector<std::vector<Tuile>>& ensembleTripletsDepart);
-	void melangerTuiles(std::vector<Tuile>& tuiles);
-	Tuile depilerTuile(std::vector<Tuile>& tuiles);
+	vector<Tuile> instancierTuiles(const std::string& fichier = "tuiles_non_reperes.json");
+	//void instancierTuilesDepart(const std::string& fichier, std::vector<std::vector<Tuile>>& ensembleTripletsDepart);
+	//void melangerTuiles(std::vector<Tuile>& tuiles);
+	//Tuile depilerTuile(std::vector<Tuile>& tuiles);
 }
 
 void testGestionTuiles();
+
+void testGestionTuiles2();
