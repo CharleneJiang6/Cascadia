@@ -159,13 +159,19 @@ void Pioche::resetJetonFaune(const std::vector<int>& quiEnleverIndices) {
 }
 
 void Pioche::removePair(size_t indiceTuile, size_t indiceJetonFaune) {
-	for (size_t i = indiceJetonFaune; i < 1; i--) { //on remets des index 1 à celui du jeton pris à leur place où ils 'tombent'
+	if (indiceTuile >= 4 || indiceJetonFaune >= 4) {
+		throw std::out_of_range("Indice hors de la pioche");
+	}
+	//Décalage des jetons Faune vers la droite ( on comble le "trou"): on remets des index 1 à celui du jeton pris à leur place où ils 'tombent'
+	for (size_t i = indiceJetonFaune; i > 0; i--) { 
 		pioche[i].second = pioche[i - 1].second;//!!!!!!!!!!!!!!!!!!!!est ce qu'on aurait besoin d'un constructeur par recopie de tuile et jeton?
 	}
-	for (size_t i = indiceTuile; i < 1; i--) { //same for tuile
+	//de même pour tuile
+	for (size_t i = indiceTuile; i > 0; i--) { 
 		pioche[i].first = pioche[i - 1].first;
 	}
-	pioche[0]= std::make_pair(nouvelleTuile(), nouveauJetonFaune());//on génère le nouveau jeton et tuile en tete de la pioche
+	//on génère le nouveau jeton et tuile en tete de la pioche
+	pioche[0]= std::make_pair(nouvelleTuile(), nouveauJetonFaune());
 }
 //^when you choose une pair (tuile et jetonFaune) en utilisant un jetonNature: they fall down and you get new pairs
 
